@@ -38,3 +38,7 @@ class Test01(TestCase):
 8 6 4 4 1
 1 3 6 7 9"""
         self.assertEqual(2, solve_p01(demo_input))
+
+    def test_solve_p01(self):
+        with open('p01/input') as f:
+            self.assertEqual(639, solve_p01(f.read()))
