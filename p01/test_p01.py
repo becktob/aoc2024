@@ -4,33 +4,19 @@ from p01.p01 import report_is_good, solve_p01
 
 
 class Test01(TestCase):
-    def test_steps_small_enough(self):
+    def test_demo_1(self):
         demo_reports = (
-            ([7, 6, 4, 2, 1], True),
-            ([1, 2, 7, 8, 9], False),
-            ([9, 7, 6, 2, 1], False),
+            ([7, 6, 4, 2, 1], True, "ok"),
+            ([1, 2, 7, 8, 9], False, "inc 5"),
+            ([9, 7, 6, 2, 1], False, "inc 4"),
+            ([1, 3, 2, 4, 5], False, "Mix increasing/decreasing"),
+            ([8, 6, 4, 4, 1], False, "no change"),
         )
-        for report, is_good in demo_reports:
-            with self.subTest(report):
+        for report, is_good, desc in demo_reports:
+            with self.subTest(desc):
                 self.assertEqual(is_good, report_is_good(report))
 
-    def test_steps_same_sign(self):
-        demo_reports = (
-            ([1, 3, 2, 4, 5], False),
-        )
-        for report, is_good in demo_reports:
-            with self.subTest(report):
-                self.assertEqual(is_good, report_is_good(report))
-
-    def test_steps_not_zero(self):
-        demo_reports = (
-            ([8, 6, 4, 4, 1], False),
-        )
-        for report, is_good in demo_reports:
-            with self.subTest(report):
-                self.assertEqual(is_good, report_is_good(report))
-
-    def test_demo(self):
+    def test_parse_demo(self):
         demo_input = """7 6 4 2 1
 1 2 7 8 9
 9 7 6 2 1
