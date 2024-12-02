@@ -8,9 +8,19 @@ def report_is_good(levels: list[int]):
     return deltas_small_enough and deltas_same_sign_and_nonzero
 
 
+def report_is_good_with_dampener(levels: list[int]):
+    with_level_removed = (levels[:i] + levels[i+1:] for i in range(len(levels)))
+
+    return report_is_good(levels) or any(map(report_is_good, with_level_removed))
+
+
 def solve_p01(input: str):
     reports = parse_input(input)
     return sum(map(report_is_good, reports))
+
+def solve_p02(input: str):
+    reports = parse_input(input)
+    return sum(map(report_is_good_with_dampener, reports))
 
 
 def parse_input(input: str) -> list[list[int]]:
