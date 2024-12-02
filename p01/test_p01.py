@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from p01.p01 import distances_of_smallest, solve_part_1
+from p01.p01 import distances_of_smallest, solve_part_1, similarity_score
 
 demo_input = """3   4
 4   3
@@ -24,3 +24,7 @@ class Test(TestCase):
     def test_solve_part_1(self):
         with open('p01/input') as f:
             self.assertEqual(1189304, solve_part_1(f.read()))
+
+    def test_similarity_score(self):
+        distances = similarity_score(demo_list_a, demo_list_b)
+        self.assertEqual(31, distances)
