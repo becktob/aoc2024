@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from p01.p01 import report_is_good, solve_p01, report_is_good_with_dampener, solve_p02
+from p02.p02 import report_is_good, solve_part_1, report_is_good_with_dampener, solve_part_2
 
 demo_input = """7 6 4 2 1
 1 2 7 8 9
@@ -36,15 +36,15 @@ class Test01(TestCase):
                 self.assertEqual(is_good, report_is_good_with_dampener(report))
 
     def test_demo_1(self):
-        self.assertEqual(2, solve_p01(demo_input))
+        self.assertEqual(2, solve_part_1(demo_input))
 
     def test_demo_2(self):
-        self.assertEqual(2, solve_p01(demo_input))
+        self.assertEqual(2, solve_part_1(demo_input))
 
-    def test_solve_p01(self):
-        with open('p01/input') as f:
-            self.assertEqual(639, solve_p01(f.read()))
+    def test_solve_p02_1(self):
+        with open('p02/input') as f:
+            self.assertEqual(639, solve_part_1(f.read()))
 
-    def test_solve_p02(self):
-        with open('p01/input') as f:
-            self.assertEqual(674, solve_p02(f.read()))
+    def test_solve_p02_2(self):
+        with open('p02/input') as f:
+            self.assertEqual(674, solve_part_2(f.read()))

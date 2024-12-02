@@ -14,11 +14,11 @@ def report_is_good_with_dampener(levels: list[int]):
     return report_is_good(levels) or any(map(report_is_good, with_level_removed))
 
 
-def solve_p01(input: str):
+def solve_part_1(input: str):
     reports = parse_input(input)
     return sum(map(report_is_good, reports))
 
-def solve_p02(input: str):
+def solve_part_2(input: str):
     reports = parse_input(input)
     return sum(map(report_is_good_with_dampener, reports))
 
