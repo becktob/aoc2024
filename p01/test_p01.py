@@ -20,3 +20,7 @@ class Test(TestCase):
 
     def test_solve_demo_1(self):
         self.assertEqual(11, solve_part_1(demo_input))
+
+    def test_solve_part_1(self):
+        with open('p01/input') as f:
+            self.assertEqual(1189304, solve_part_1(f.read()))
