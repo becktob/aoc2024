@@ -21,3 +21,11 @@ class Test01(TestCase):
         for report, is_good in demo_reports:
             with self.subTest(report):
                 self.assertEqual(is_good, report_is_good(report))
+
+    def test_steps_not_zero(self):
+        demo_reports = (
+            ([8, 6, 4, 4, 1], False),
+        )
+        for report, is_good in demo_reports:
+            with self.subTest(report):
+                self.assertEqual(is_good, report_is_good(report))
