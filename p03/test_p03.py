@@ -9,5 +9,9 @@ class Test(TestCase):
     def test_find_mul(self):
         self.assertEqual([(2, 4), (5, 5), (11, 8), (8, 5)], find_mul(demo_input))
 
-    def test_solve_part_1(self):
+    def test_solve_demo_1(self):
         self.assertEqual(161, solve_part_1(demo_input))
+
+    def test_solve_part_1(self):
+        with open('p03/input') as f:
+            self.assertEqual(165225049, solve_part_1(f.read()))
