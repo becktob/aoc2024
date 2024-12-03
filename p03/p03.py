@@ -5,15 +5,15 @@ def find_mul(program, disable=False) -> list[tuple[int, int]]:
     matches = re.finditer(r'mul\((?P<a>[0-9]{1,3}),(?P<b>[0-9]{1,3})\)', program)
 
     if disable:
-        do_dont = list(re.finditer(r"do(n't)?\(\)", program))
+        do_dont = re.finditer(r"do(n't)?\(\)", program)
+        position_enabled = {m.start(): m[0]=="do()" for m in do_dont}
 
         def is_enabled(match: re.Match):
-            preceding_directives = [directive for directive in do_dont if directive.start() < match.start()]
-            active_directive = max(preceding_directives, key=lambda m: m.start(), default=None)
-            if active_directive is None:
-                return True
+            preceding_directives = [enabled for start, enabled in position_enabled.items() if start < match.start()]
+            if preceding_directives:
+                return preceding_directives[-1]  # Dict ordered by default in python now
             else:
-                return active_directive[0] == "do()"
+                return True  # At beginning: No directive -> enabled
 
         matches = [m for m in matches if is_enabled(m)]
 
