@@ -1,8 +1,9 @@
 from unittest import TestCase
 
-from p03.p03 import find_mul, solve_part_1
+from p03.p03 import find_mul, solve_part_1, solve_part_2
 
 demo_input = "xmul(2,4)%&mul[3,7]!@^do_not_mul(5,5)+mul(32,64]then(mul(11,8)mul(8,5))"
+demo_input_2 = "xmul(2,4)&mul[3,7]!^don't()_mul(5,5)+mul(32,64](mul(11,8)undo()?mul(8,5))"
 
 
 class Test(TestCase):
@@ -15,3 +16,6 @@ class Test(TestCase):
     def test_solve_part_1(self):
         with open('p03/input') as f:
             self.assertEqual(165225049, solve_part_1(f.read()))
+
+    def test_solve_demo_2(self):
+        self.assertEqual(48, solve_part_2(demo_input_2))
