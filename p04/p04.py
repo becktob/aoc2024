@@ -32,3 +32,19 @@ def find_xmases(input: numpy.ndarray[str]):
         for next_coord in next_letter_neighbors:
             path_todo = path + [next_coord]
             paths_todo.append(path_todo)
+
+
+
+def find_straight_xmases(input):
+    curly_xmases = find_xmases(input)
+
+    for curly in curly_xmases:
+        first_delta = numpy.array(curly[1])-curly[0]
+        if all(all(numpy.array(n)-m == first_delta) for n,m in zip(curly[1:], curly[:-1])):
+            yield curly
+
+
+def solve_part_1(raw_input):
+    input = string_to_array(raw_input)
+    xmases_found = list(find_straight_xmases(input))
+    return len(xmases_found)
