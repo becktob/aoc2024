@@ -8,6 +8,7 @@ def string_to_array(content, dtype=numpy.uint8):
 
 
 def find_xmases(input: numpy.ndarray[str]):
+    # warning: might be unused/badly tested; not needed for actualy solution
     query = 'XMAS'
 
     where_letter = {letter: list(zip(*numpy.where(letter == input))) for letter in query}
@@ -40,12 +41,21 @@ def any_neighbor(loc, path):
 
 
 def find_straight_xmases(input):
-    curly_xmases = find_xmases(input)
+    query = 'XMAS'
 
-    for curly in curly_xmases:
-        first_delta = numpy.array(curly[1]) - curly[0]
-        if all(all(numpy.array(n) - m == first_delta) for n, m in zip(curly[1:], curly[:-1])):
-            yield curly
+    x_locs = zip(*numpy.where(query[0] == input))
+
+    directions = [(dx, dy) for dx in (-1, 0, 1) for dy in (-1, 0, 1) if not 0 == dy == dx]
+
+    for i, j in x_locs:
+        for di, dj in directions:
+            coords_on_path = [(i + n * di, j + n * dj) for n in range(len(query))]
+            if any(any(c < 0 or c >= len(input) for c in coords) for coords in coords_on_path):
+                continue
+
+            letters_on_path = [input[_i, _j] for _i, _j in coords_on_path]
+            if "".join(letters_on_path) == query:
+                yield coords_on_path
 
 
 def solve_part_1(raw_input):

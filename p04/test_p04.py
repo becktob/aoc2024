@@ -1,4 +1,4 @@
-from unittest import TestCase, skip
+from unittest import TestCase
 
 import numpy
 
@@ -42,7 +42,6 @@ class TestP04(TestCase):
             # print(input_display)
         self.assertEqual(18, len(xmases_found))
 
-    @skip
     def test_solve_part_1(self):
         with open('p04/input') as f:
             self.assertEqual(2642, solve_part_1(f.read()))
