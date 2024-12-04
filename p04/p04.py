@@ -10,7 +10,9 @@ def string_to_array(content, dtype=numpy.uint8):
 def find_xmases(input: numpy.ndarray[str]):
     query = 'XMAS'
 
-    paths_todo = zip(*numpy.where(query[0] == input))
+    where_letter = {letter: list(zip(*numpy.where(letter == input))) for letter in query}
+
+    paths_todo = where_letter[query[0]]
 
     paths_todo = [[coords] for coords in paths_todo]
 
@@ -23,7 +25,7 @@ def find_xmases(input: numpy.ndarray[str]):
         next_letter = query[len(path)]
         tail = path[-1]
 
-        next_letter_locations = zip(*numpy.where(next_letter == input))
+        next_letter_locations = where_letter[next_letter]
 
         next_letter_neighbors = [loc for loc in next_letter_locations
                                  if abs(loc[0] - tail[0]) <= 1
@@ -34,13 +36,12 @@ def find_xmases(input: numpy.ndarray[str]):
             paths_todo.append(path_todo)
 
 
-
 def find_straight_xmases(input):
     curly_xmases = find_xmases(input)
 
     for curly in curly_xmases:
-        first_delta = numpy.array(curly[1])-curly[0]
-        if all(all(numpy.array(n)-m == first_delta) for n,m in zip(curly[1:], curly[:-1])):
+        first_delta = numpy.array(curly[1]) - curly[0]
+        if all(all(numpy.array(n) - m == first_delta) for n, m in zip(curly[1:], curly[:-1])):
             yield curly
 
 
