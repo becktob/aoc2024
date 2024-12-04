@@ -26,8 +26,8 @@ def find_xmases(input: numpy.ndarray[str]):
         next_letter_locations = zip(*numpy.where(next_letter == input))
 
         next_letter_neighbors = [loc for loc in next_letter_locations
-                                 if abs(loc[0] - tail[0]) == 1
-                                 and abs(loc[1] - tail[1]) == 1]
+                                 if abs(loc[0] - tail[0]) <= 1
+                                 and abs(loc[1] - tail[1]) <= 1]
 
         for next_coord in next_letter_neighbors:
             path_todo = path + [next_coord]
