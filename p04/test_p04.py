@@ -2,7 +2,7 @@ from unittest import TestCase, skip
 
 import numpy
 
-from p04.p04 import string_to_array, find_xmases, find_straight_xmases, solve_part_1, find_x_mases
+from p04.p04 import string_to_array, find_xmases, find_straight_xmases, solve_part_1, find_x_mases, solve_part_2
 
 demo_input = """MMMSXXMASM
 MSAMXMSMSA
@@ -52,3 +52,7 @@ class TestP04(TestCase):
         x_mases_found = list(find_x_mases(input))
 
         self.assertEqual(9, len(x_mases_found))
+
+    def test_solve_part_2(self):
+        with open('p04/input') as f:
+            self.assertEqual(1974, solve_part_2(f.read()))

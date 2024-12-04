@@ -64,3 +64,9 @@ def find_x_mases(input):
         diag_2 = set((input[i + 1, j + 1], input[i - 1, j - 1]))
         if diag_1 == {'M', 'S'} == diag_2:
             yield i, j
+
+
+def solve_part_2(raw_input):
+    input = string_to_array(raw_input)
+    x_mases_found = list(find_x_mases(input))
+    return len(x_mases_found)
