@@ -52,3 +52,15 @@ def solve_part_1(raw_input):
     input = string_to_array(raw_input)
     xmases_found = list(find_straight_xmases(input))
     return len(xmases_found)
+
+
+def find_x_mases(input):
+    a_locs = zip(*numpy.where('A' == input))
+
+    for i, j in a_locs:
+        if i in (0, len(input) - 1) or j in (0, len(input) - 1):
+            continue
+        diag_1 = set((input[i + 1, j - 1], input[i - 1, j + 1]))
+        diag_2 = set((input[i + 1, j + 1], input[i - 1, j - 1]))
+        if diag_1 == {'M', 'S'} == diag_2:
+            yield i, j
