@@ -23,17 +23,20 @@ def find_xmases(input: numpy.ndarray[str]):
             continue
 
         next_letter = query[len(path)]
-        tail = path[-1]
 
         next_letter_locations = where_letter[next_letter]
 
         next_letter_neighbors = [loc for loc in next_letter_locations
-                                 if abs(loc[0] - tail[0]) <= 1
-                                 and abs(loc[1] - tail[1]) <= 1]
+                                 if any_neighbor(loc, path)]
 
         for next_coord in next_letter_neighbors:
             path_todo = path + [next_coord]
             paths_todo.append(path_todo)
+
+
+def any_neighbor(loc, path):
+    tail = path[-1]
+    return abs(loc[0] - tail[0]) <= 1 and abs(loc[1] - tail[1]) <= 1
 
 
 def find_straight_xmases(input):
