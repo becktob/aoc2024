@@ -12,7 +12,10 @@ class Update:
         return all(rule.is_satisfied(self) for rule in rules)
 
     def order(self, rules: list['Rule']):
-        pass
+        while unsatisfied := next((r for r in rules if not r.is_satisfied(self)), None):
+            i,j  = (self.pages.index(unsatisfied.before),
+                    self.pages.index(unsatisfied.after))
+            self.pages[i], self.pages[j] = self.pages[j], self.pages[i]
 
 
 class Rule:
