@@ -13,7 +13,7 @@ class Update:
 
     def order(self, rules: list['Rule']):
         while unsatisfied := next((r for r in rules if not r.is_satisfied(self)), None):
-            i,j  = (self.pages.index(unsatisfied.before),
+            i, j = (self.pages.index(unsatisfied.before),
                     self.pages.index(unsatisfied.after))
             self.pages[i], self.pages[j] = self.pages[j], self.pages[i]
 
@@ -43,4 +43,13 @@ def solve_part_1(raw_input):
     rules, updates = parse_rules_updates(raw_input)
     correct_updates = filter(lambda u: u.is_ordered(rules), updates)
     middle_numbers = (update.middle() for update in correct_updates)
+    return sum(middle_numbers)
+
+
+def solve_part_2(raw_input):
+    rules, updates = parse_rules_updates(raw_input)
+    updates_to_correct = [u for u in updates if not u.is_ordered(rules)]
+    for u in updates_to_correct:
+        u.order(rules)
+    middle_numbers = (update.middle() for update in updates_to_correct)
     return sum(middle_numbers)

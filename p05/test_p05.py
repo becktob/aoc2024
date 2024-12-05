@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from p05.p05 import parse_rules_updates, solve_part_1, Update
+from p05.p05 import parse_rules_updates, solve_part_1, Update, solve_part_2
 
 demo_input_5 = """47|53
 97|13
@@ -57,3 +57,10 @@ class Test(TestCase):
         update = Update('75,97,47,61,53')
         update.order(rules)
         self.assertEqual([97, 75, 47, 61, 53], update.pages)
+
+    def test_solve_demo_2(self):
+        self.assertEqual(123, solve_part_2(demo_input_5))
+
+    def test_solve_part_2(self):
+        with open('p05/input') as f:
+            self.assertEqual(0, solve_part_2(f.read()))
