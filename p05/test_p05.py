@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from p05.p05 import parse_rules_updates, order_is_correct
+from p05.p05 import parse_rules_updates, order_is_correct, solve_part_1
 
 demo_input_5 = """47|53
 97|13
@@ -31,6 +31,7 @@ demo_input_5 = """47|53
 61,13,29
 97,13,75,29,47"""
 
+
 class Test(TestCase):
 
     def test_order_is_correct(self):
@@ -43,3 +44,6 @@ class Test(TestCase):
         self.assertFalse(order_is_correct(updates[3], rules))
         self.assertFalse(order_is_correct(updates[4], rules))
         self.assertFalse(order_is_correct(updates[5], rules))
+
+    def test_solve_demo_1(self):
+        self.assertEqual(143, solve_part_1(demo_input_5))

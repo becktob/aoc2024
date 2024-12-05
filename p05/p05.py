@@ -5,6 +5,10 @@ class Update:
     def __repr__(self):
         return f"<Update: {self.pages}>"
 
+    def middle(self):
+        return self.pages[len(self.pages) // 2]
+
+
 class Rule:
     def __init__(self, rule_line):
         self.before, self.after = [int(n) for n in rule_line.split('|')]
@@ -25,5 +29,13 @@ def parse_rules_updates(raw_input):
     return ([Rule(raw) for raw in raw_rules.splitlines()],
             [Update(raw) for raw in raw_updates.splitlines()])
 
-def order_is_correct(update: Update, rules:Rule):
+
+def order_is_correct(update: Update, rules: list[Rule]):
     return all(rule.is_satisfied(update) for rule in rules)
+
+
+def solve_part_1(raw_input):
+    rules, updates = parse_rules_updates(raw_input)
+    correct_updates = filter(lambda u: order_is_correct(u, rules), updates)
+    middle_numbers = (update.middle() for update in correct_updates)
+    return sum(middle_numbers)
