@@ -8,6 +8,12 @@ class Update:
     def middle(self):
         return self.pages[len(self.pages) // 2]
 
+    def is_ordered(self, rules: list['Rule']):
+        return all(rule.is_satisfied(self) for rule in rules)
+
+    def order(self, rules: list['Rule']):
+        pass
+
 
 class Rule:
     def __init__(self, rule_line):
@@ -30,12 +36,8 @@ def parse_rules_updates(raw_input):
             [Update(raw) for raw in raw_updates.splitlines()])
 
 
-def order_is_correct(update: Update, rules: list[Rule]):
-    return all(rule.is_satisfied(update) for rule in rules)
-
-
 def solve_part_1(raw_input):
     rules, updates = parse_rules_updates(raw_input)
-    correct_updates = filter(lambda u: order_is_correct(u, rules), updates)
+    correct_updates = filter(lambda u: u.is_ordered(rules), updates)
     middle_numbers = (update.middle() for update in correct_updates)
     return sum(middle_numbers)
