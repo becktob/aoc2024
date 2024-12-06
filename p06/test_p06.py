@@ -3,7 +3,7 @@ from unittest import TestCase
 from numpy.testing import assert_array_equal
 
 from helpers import string_to_array
-from p06.p06 import one_step
+from p06.p06 import one_step, solve
 
 demo_input_6 = """....#.....
 .........#
@@ -49,3 +49,6 @@ class Test(TestCase):
             maze = one_step(maze)
 
         self.assertSequenceEqual(maze.tolist(), maze_6.tolist())
+
+    def test_solve_demo_part_1(self):
+        self.assertEqual(41, solve(demo_input_6))
