@@ -3,7 +3,7 @@ from unittest import TestCase
 from numpy.testing import assert_array_equal
 
 from helpers import string_to_array
-from p06.p06 import one_step, solve
+from p06.p06 import one_step, solve, is_loop
 
 demo_input_6 = """....#.....
 .........#
@@ -56,3 +56,13 @@ class Test(TestCase):
     def test_solve_part_1(self):
         with open('p06/input') as f:
             self.assertEqual(4696, solve(f.read()))
+
+    def test_is_not_loop(self):
+        maze = string_to_array(demo_input_6)
+        self.assertFalse(is_loop((maze)))
+
+    def test_is_loop(self):
+        maze = string_to_array(demo_input_6)
+        maze[6,3] = '#'
+        self.assertTrue(is_loop((maze)))
+

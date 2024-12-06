@@ -35,8 +35,26 @@ def one_step(maze, current_position=None, current_direction=None):
 def solve(raw_input):
     maze = string_to_array(raw_input)
 
-    maze, next_position, next_direction = one_step(maze, None)
-    while next_position is not None:
-        maze, next_position, next_direction = one_step(maze, next_position, next_direction)
+    maze, _ = run(maze)
 
     return len(numpy.argwhere(maze == 'X'))
+
+
+def run(maze):
+    maze, next_position, next_direction = one_step(maze, None)
+
+    visited = set()
+
+    while next_position is not None:
+        state = tuple(next_position.tolist()), next_direction
+        if state in visited:
+            return maze, True
+        visited.add(state)
+
+        maze, next_position, next_direction = one_step(maze, next_position, next_direction)
+
+    return maze, False
+
+def is_loop(maze):
+    maze, is_loop = run(maze)
+    return is_loop
