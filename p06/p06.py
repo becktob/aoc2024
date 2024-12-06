@@ -12,6 +12,11 @@ def one_step(maze):
     current_position = current_position[0]
 
     next_position = current_position + directions[current_direction]
-    maze[*next_position] = current_direction
-    maze[*current_position] = 'X'
+    if maze [*next_position] != '#':  # forward
+        maze[*next_position] = current_direction
+        maze[*current_position] = 'X'
+    else:  # turn
+        symbols = list(directions.keys())
+        i = symbols.index(current_direction)
+        maze[*current_position] = symbols[(i + 1) % len(symbols)]
     return maze
