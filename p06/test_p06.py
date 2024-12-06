@@ -3,7 +3,7 @@ from unittest import TestCase
 from numpy.testing import assert_array_equal
 
 from helpers import string_to_array
-from p06.p06 import one_step, solve, is_loop
+from p06.p06 import one_step, solve_part_1, is_loop, solve_part_2
 
 demo_input_6 = """....#.....
 .........#
@@ -51,11 +51,11 @@ class Test(TestCase):
         self.assertSequenceEqual(maze.tolist(), maze_6.tolist())
 
     def test_solve_demo_part_1(self):
-        self.assertEqual(41, solve(demo_input_6))
+        self.assertEqual(41, solve_part_1(demo_input_6))
 
     def test_solve_part_1(self):
         with open('p06/input') as f:
-            self.assertEqual(4696, solve(f.read()))
+            self.assertEqual(4696, solve_part_1(f.read()))
 
     def test_is_not_loop(self):
         maze = string_to_array(demo_input_6)
@@ -63,6 +63,8 @@ class Test(TestCase):
 
     def test_is_loop(self):
         maze = string_to_array(demo_input_6)
-        maze[6,3] = '#'
+        maze[6, 3] = '#'
         self.assertTrue(is_loop((maze)))
 
+    def test_solve_demo_2(self):
+        self.assertEqual(6, solve_part_2(demo_input_6))

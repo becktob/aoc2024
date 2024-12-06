@@ -32,7 +32,7 @@ def one_step(maze, current_position=None, current_direction=None):
         return maze, current_position, new_direction
 
 
-def solve(raw_input):
+def solve_part_1(raw_input):
     maze = string_to_array(raw_input)
 
     maze, _ = run(maze)
@@ -58,3 +58,18 @@ def run(maze):
 def is_loop(maze):
     maze, is_loop = run(maze)
     return is_loop
+
+def solve_part_2(raw_input):
+    maze = string_to_array(raw_input)
+
+    looping_blocks = []
+    for block in numpy.ndindex(maze.shape):
+        if maze[block] in directions.keys():
+            continue
+        blocked_maze = maze.copy()
+        blocked_maze[block] = '#'
+        if is_loop(blocked_maze):
+            looping_blocks.append(block)
+
+    return len(looping_blocks)
+
