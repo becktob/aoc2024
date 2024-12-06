@@ -2,7 +2,8 @@ from unittest import TestCase
 
 import numpy
 
-from p04.p04 import string_to_array, find_xmases, find_straight_xmases, solve_part_1, find_x_mases, solve_part_2
+from p04.p04 import find_xmases, find_straight_xmases, solve_part_1, find_x_mases, solve_part_2
+from helpers import string_to_array
 
 demo_input = """MMMSXXMASM
 MSAMXMSMSA
