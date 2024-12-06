@@ -62,13 +62,19 @@ def is_loop(maze):
 def solve_part_2(raw_input):
     maze = string_to_array(raw_input)
 
+    # only need to try blocking places visited by basic maze
+    basic_maze = maze.copy()
+    basic_run, *_ = run(basic_maze)
+    visited_in_basic = numpy.argwhere(basic_run == 'X')
+
     looping_blocks = []
-    for block in numpy.ndindex(maze.shape):
-        if maze[block] in directions.keys():
+    for n, block in enumerate(visited_in_basic):
+        if maze[*block] in directions.keys():
             continue
         blocked_maze = maze.copy()
-        blocked_maze[block] = '#'
+        blocked_maze[*block] = '#'
         if is_loop(blocked_maze):
+            print(n, block)
             looping_blocks.append(block)
 
     return len(looping_blocks)
