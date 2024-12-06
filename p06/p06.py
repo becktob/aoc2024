@@ -18,20 +18,23 @@ def one_step(maze):
     next_position = current_position + directions[current_direction]
     in_bounds = ((0, 0) <= next_position).all() and (next_position < maze.shape).all()
     if not in_bounds:
-        pass
-    elif maze[*next_position] != '#':  # forward
+        return maze, None
+
+    if maze[*next_position] != '#':  # forward
         maze[*next_position] = current_direction
+        return maze, next_position
     else:  # turn
         symbols = list(directions.keys())
         i = symbols.index(current_direction)
         maze[*current_position] = symbols[(i + 1) % len(symbols)]
-    return maze
+        return maze, current_position
 
 
 def solve(raw_input):
     maze = string_to_array(raw_input)
 
-    while any(d in maze for d in directions.keys()):
-        maze = one_step(maze)
+    next_position = True
+    while next_position is not None:
+        maze, next_position = one_step(maze)
 
     return len(numpy.argwhere(maze == 'X'))

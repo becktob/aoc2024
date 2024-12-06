@@ -35,7 +35,7 @@ class Test(TestCase):
         maze_5 = string_to_array(demo_6_step_5)
 
         for _ in range(5):
-            maze = one_step(maze)
+            maze, _ = one_step(maze)
 
         self.assertSequenceEqual(maze.tolist(), maze_5.tolist())
 
@@ -46,7 +46,7 @@ class Test(TestCase):
         maze_6[maze_6 == '^'] = '>'
 
         for _ in range(6):
-            maze = one_step(maze)
+            maze, _ = one_step(maze)
 
         self.assertSequenceEqual(maze.tolist(), maze_6.tolist())
 
