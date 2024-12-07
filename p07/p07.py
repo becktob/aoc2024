@@ -18,3 +18,18 @@ def apply(ops, operands):
     for op, operand in zip(ops, operands[1:]):
         acc = op(acc, operand)
     return acc
+
+
+class Equation:
+    def __init__(self, line: str):
+        raw_result, raw_operands = line.split(':')
+        self.result = int(raw_result)
+        self.operands = [int(n) for n in raw_operands.split()]
+
+
+def solve_part_1(raw_input: str):
+    equations = [Equation(line) for line in raw_input.splitlines()]
+
+    true_able = [eq for eq in equations if can_make_true(eq.result, eq.operands)]
+
+    return sum(eq.result for eq in true_able)
