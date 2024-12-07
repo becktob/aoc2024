@@ -25,11 +25,16 @@ def one_step(maze, current_position=None, current_direction=None):
         maze[*next_position] = current_direction
         return maze, next_position, current_direction
     else:  # turn
-        symbols = list(directions.keys())
-        i = symbols.index(current_direction)
-        new_direction = symbols[(i + 1) % len(symbols)]
+        new_direction = direction_after_turn(current_direction)
         maze[*current_position] = new_direction
         return maze, current_position, new_direction
+
+
+def direction_after_turn(current_direction):
+    symbols = list(directions.keys())
+    i = symbols.index(current_direction)
+    new_direction = symbols[(i + 1) % len(symbols)]
+    return new_direction
 
 
 def solve_part_1(raw_input):
