@@ -10,7 +10,7 @@ def can_make_true(result: int, operands: list[int], possible_operators = None):
         possible_operators,
         repeat=len(operands) - 1)
 
-    possible_results = [apply(ops, operands) for ops in operator_combinations]
+    possible_results = (apply(ops, operands) for ops in operator_combinations)
     return any(result == r for r in possible_results)
 
 
