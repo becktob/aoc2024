@@ -31,3 +31,7 @@ class Test(TestCase):
 
     def test_solve_demo_2(self):
         self.assertEqual(11387, solve_part_2(demo_input_7))
+
+    def test_solve_part_2(self):
+        with open('p07/input') as f:
+            self.assertEqual(254136560217241, solve_part_2(f.read()))
