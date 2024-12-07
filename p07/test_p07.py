@@ -22,5 +22,9 @@ class Test(TestCase):
         self.assertTrue(can_make_true(3267, [81, 40, 27]))
         self.assertTrue(can_make_true(292, [11, 6, 16, 20]))
 
-    def test_solve_demo(self):
+    def test_solve_demo_1(self):
         self.assertEqual(3749, solve_part_1(demo_input_7))
+
+    def test_solve_part_1(self):
+        with open('p07/input') as f:
+            self.assertEqual(1038838357795, solve_part_1(f.read()))
