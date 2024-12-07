@@ -40,7 +40,7 @@ def solve_part_2(raw_input: str):
 
     possible_operators = (operator.add,
                           operator.mul,
-                          lambda a, b: int(f"{a}{b}"))
+                          lambda a, b: 10**len(str(b))*a + b)
 
     true_able = [eq for eq in equations if can_make_true(eq.result, eq.operands, possible_operators)]
 
