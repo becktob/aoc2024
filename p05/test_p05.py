@@ -63,4 +63,4 @@ class Test(TestCase):
 
     def test_solve_part_2(self):
         with open('p05/input') as f:
-            self.assertEqual(0, solve_part_2(f.read()))
+            self.assertEqual(4598, solve_part_2(f.read()))
