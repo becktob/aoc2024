@@ -2,8 +2,9 @@ import itertools
 import operator
 
 
-def can_make_true(result: int, operands: list[int]):
-    possible_operators = (operator.add, operator.mul)
+def can_make_true(result: int, operands: list[int], possible_operators = None):
+    if possible_operators is None:
+        possible_operators = (operator.add, operator.mul)
 
     operator_combinations = itertools.product(
         possible_operators,
@@ -31,5 +32,16 @@ def solve_part_1(raw_input: str):
     equations = [Equation(line) for line in raw_input.splitlines()]
 
     true_able = [eq for eq in equations if can_make_true(eq.result, eq.operands)]
+
+    return sum(eq.result for eq in true_able)
+
+def solve_part_2(raw_input: str):
+    equations = [Equation(line) for line in raw_input.splitlines()]
+
+    possible_operators = (operator.add,
+                          operator.mul,
+                          lambda a, b: int(f"{a}{b}"))
+
+    true_able = [eq for eq in equations if can_make_true(eq.result, eq.operands, possible_operators)]
 
     return sum(eq.result for eq in true_able)

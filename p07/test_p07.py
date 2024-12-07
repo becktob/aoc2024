@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from p07.p07 import can_make_true, solve_part_1
+from p07.p07 import can_make_true, solve_part_1, solve_part_2
 
 demo_input_7 = """190: 10 19
 3267: 81 40 27
@@ -28,3 +28,6 @@ class Test(TestCase):
     def test_solve_part_1(self):
         with open('p07/input') as f:
             self.assertEqual(1038838357795, solve_part_1(f.read()))
+
+    def test_solve_demo_2(self):
+        self.assertEqual(11387, solve_part_2(demo_input_7))
