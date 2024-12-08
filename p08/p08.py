@@ -15,7 +15,7 @@ def antinodes(map, any_multiple=False):
             a_to_b = b - a
             node_locs = (b + a_to_b, a - a_to_b)
             if any_multiple:
-                size = max(map.shape)  # TODO: very lazy/inefficient
+                size = max(map.shape)//min(abs(a_to_b))  # TODO: lazy/inefficient
                 node_locs = (a + n * a_to_b for n in range(-size, size))
 
             for n in node_locs:
