@@ -3,7 +3,7 @@ from unittest import TestCase
 import numpy
 
 from helpers import string_to_array
-from p08.p08 import antinodes
+from p08.p08 import antinodes, solve_part_1
 
 demo_input_8 = """............
 ........0...
@@ -40,7 +40,9 @@ class Test(TestCase):
         self.assertEqual(2, antinode_count)
 
     def test_demo_part_1(self):
-        map = string_to_array(demo_input_8)
-        antinode_map = antinodes(map)
-        antinode_count = numpy.count_nonzero(antinode_map)
+        antinode_count = solve_part_1(demo_input_8)
         self.assertEqual(14, antinode_count)
+
+    def test_solve_part_1(self):
+        with open('p08/input') as f:
+            self.assertEqual(323, solve_part_1(f.read()))

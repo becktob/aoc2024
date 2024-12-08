@@ -1,8 +1,10 @@
 import numpy
 
+from helpers import string_to_array
+
 
 def antinodes(map):
-    frequencies = ('0', 'A', 'a')
+    frequencies = set(map[map != '.'])
 
     antinodes = numpy.zeros_like(map)
     for freq in frequencies:
@@ -19,3 +21,10 @@ def antinodes(map):
                     antinodes[*n] = 1
 
     return antinodes
+
+
+def solve_part_1(raw):
+    map = string_to_array(raw)
+    antinode_map = antinodes(map)
+    antinode_count = numpy.count_nonzero(antinode_map)
+    return antinode_count
