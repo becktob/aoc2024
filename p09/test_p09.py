@@ -53,3 +53,7 @@ class TestDiskMap2(TestCase):
 
     def test_solve_demo_part2(self):
         self.assertEqual(2858, solve_part_2(demo_input_9))
+
+    def test_solve_part_2(self):
+        with open('p09/input') as f:
+            self.assertEqual(6265268809555, solve_part_2(f.read()))

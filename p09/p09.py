@@ -94,8 +94,10 @@ class DiskMap2:
         files = list(self.files_by_pos.values())
         files.sort(key=lambda f: f.id, reverse=True)
         for file in files:
+            free_items = list(self.free_by_pos.items())
+            free_items.sort(key=lambda item: item[0])
             try:
-                free_before = next((pos, l) for pos, l in self.free_by_pos.items() if pos < file.pos and l >= file.size)
+                free_before = next((pos, l) for pos, l in free_items if pos < file.pos and l >= file.size)
             except StopIteration:
                 continue
 
