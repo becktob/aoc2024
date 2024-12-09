@@ -35,3 +35,12 @@ class DiskMap:
         last_used = sum(1 for _ in itertools.takewhile(lambda i: i is None, self.disk[::-1]))
         free_count = self.disk.count(None)
         return last_used == free_count
+
+    def checksum(self):
+        return sum(pos * id for pos, id in enumerate(self.disk) if id is not None)
+
+
+def solve_part_1(raw_input):
+    map = DiskMap(raw_input)
+    map.compact_all()
+    return map.checksum()

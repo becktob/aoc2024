@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from p09.p09 import DiskMap
+from p09.p09 import DiskMap, solve_part_1
 
 demo_input_9 = "2333133121414131402"
 demo_repr = "00...111...2...333.44.5555.6666.777.888899"
@@ -28,3 +28,6 @@ class TestDiskMap(TestCase):
 
         step_n = "0099811188827773336446555566.............."
         self.assertEqual(step_n, str(map))
+
+    def test_solve_demo_part1(self):
+        solve_part_1(demo_input_9)
