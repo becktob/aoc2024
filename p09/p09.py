@@ -74,14 +74,19 @@ class DiskMap2:
             total_pos += block_len
 
     def generate_disk(self):
-        self.disk = [None] * (sum(self.free_by_pos.values()) + sum(f.size for f in self.files_by_pos.values()))
+        disk = [-1] * (sum(self.free_by_pos.values()) + sum(f.size for f in self.files_by_pos.values()))
 
         for pos, file in self.files_by_pos.items():
-            self.disk[pos: pos + file.size] = [file.id] * file.size
+            disk[pos: pos + file.size] = [file.id] * file.size
+
+        for pos, len in self.free_by_pos.items():
+            disk[pos: pos + len] = [None] * len
+
+        return disk
 
     def __repr__(self):
-        self.generate_disk()
-        disk_repr = ['.' if d is None else str(d) for d in self.disk]
+        disk = self.generate_disk()
+        disk_repr = ['.' if d is None else str(d) for d in disk]
 
         return "".join(disk_repr)
 
@@ -105,8 +110,8 @@ class DiskMap2:
                 self.files_by_pos.update({pos_free: file})  # insert file
 
     def checksum(self):
-        self.generate_disk()
-        return sum(pos * id for pos, id in enumerate(self.disk) if id is not None)
+        disk = self.generate_disk()
+        return sum(pos * id for pos, id in enumerate(disk) if id is not None)
 
 
 def solve_part_2(raw_input):
