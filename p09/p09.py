@@ -94,20 +94,23 @@ class DiskMap2:
         files = list(self.files_by_pos.values())
         files.sort(key=lambda f: f.id, reverse=True)
         for file in files:
-            free_before = [(pos, len) for pos, len in self.free_by_pos.items() if pos < file.pos and len >= file.size]
-            if len(free_before) > 0:  # Todo: find first only
-                pos_free, len_free = free_before[0]
+            try:
+                free_before = next((pos, l) for pos, l in self.free_by_pos.items() if pos < file.pos and l >= file.size)
+            except StopIteration:
+                continue
 
-                remaining_free_size = len_free - file.size
-                remaining_free_pos = pos_free + file.size
-                self.free_by_pos.pop(pos_free)  # remove old free
-                self.free_by_pos.update({remaining_free_pos: remaining_free_size})  # add remaining free
-                # TODO: consolidate neighboring free blocks into one (not necessary for single pass?)
+            pos_free, len_free = free_before
 
-                self.files_by_pos.pop(file.pos)  # remove file
-                self.free_by_pos.update({file.pos: file.size})  # replace file with free
-                file.pos = pos_free
-                self.files_by_pos.update({pos_free: file})  # insert file
+            remaining_free_size = len_free - file.size
+            remaining_free_pos = pos_free + file.size
+            self.free_by_pos.pop(pos_free)  # remove old free
+            self.free_by_pos.update({remaining_free_pos: remaining_free_size})  # add remaining free
+            # TODO: consolidate neighboring free blocks into one (not necessary for single pass?)
+
+            self.files_by_pos.pop(file.pos)  # remove file
+            self.free_by_pos.update({file.pos: file.size})  # replace file with free
+            file.pos = pos_free
+            self.files_by_pos.update({pos_free: file})  # insert file
 
     def checksum(self):
         disk = self.generate_disk()
