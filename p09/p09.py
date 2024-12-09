@@ -23,6 +23,15 @@ class DiskMap:
 
     def compact_one_step(self):
         first_free = self.disk.index(None)
-        last_used = 1 + sum(1 for _ in itertools.takewhile(lambda i: i is None, self.disk[::-1]))
-        self.disk[first_free] = self.disk[-last_used]
-        self.disk[-last_used] = None
+        last_used = sum(1 for _ in itertools.takewhile(lambda i: i is None, self.disk[::-1]))
+        self.disk[first_free] = self.disk[-1 - last_used]
+        self.disk[-1 - last_used] = None
+
+    def compact_all(self):
+        while not self.is_compact():
+            self.compact_one_step()
+
+    def is_compact(self):
+        last_used = sum(1 for _ in itertools.takewhile(lambda i: i is None, self.disk[::-1]))
+        free_count = self.disk.count(None)
+        return last_used == free_count

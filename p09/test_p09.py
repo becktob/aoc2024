@@ -11,7 +11,7 @@ class TestDiskMap(TestCase):
         map = DiskMap(demo_input_9)
         self.assertEqual(demo_repr, str(map))
 
-    def test_compact(self):
+    def test_compact_one_stepp(self):
         map = DiskMap(demo_input_9)
 
         map.compact_one_step()
@@ -21,3 +21,10 @@ class TestDiskMap(TestCase):
         map.compact_one_step()
         step_2 = "0099.111...2...333.44.5555.6666.777.8888.."
         self.assertEqual(step_2, str(map))
+
+    def test_compact_all(self):
+        map = DiskMap(demo_input_9)
+        map.compact_all()
+
+        step_n = "0099811188827773336446555566.............."
+        self.assertEqual(step_n, str(map))
