@@ -86,7 +86,7 @@ class DiskMap2:
 
     def __repr__(self):
         disk = self.generate_disk()
-        disk_repr = ['.' if d is None else str(d) for d in disk]
+        disk_repr = ['.' if d is None else chr(d+ord('0')) for d in disk]
 
         return "".join(disk_repr)
 
