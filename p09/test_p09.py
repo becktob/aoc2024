@@ -1,7 +1,7 @@
 import unittest
 from unittest import TestCase
 
-from p09.p09 import DiskMap, solve_part_1
+from p09.p09 import DiskMap, solve_part_1, DiskMap2
 
 demo_input_9 = "2333133121414131402"
 demo_repr = "00...111...2...333.44.5555.6666.777.888899"
@@ -37,3 +37,9 @@ class TestDiskMap(TestCase):
     def test_solve_part_1(self):
         with open('p09/input') as f:
             self.assertEqual(6241633730082, solve_part_1(f.read()))
+
+
+class TestDiskMap2(TestCase):
+    def test_parse_repr(self):
+        map = DiskMap2(demo_input_9)
+        self.assertEqual(demo_repr, str(map))

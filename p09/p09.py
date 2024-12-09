@@ -46,3 +46,40 @@ def solve_part_1(raw_input: str):
     map = DiskMap(raw_input.strip())
     map.compact_all()
     return map.checksum()
+
+
+class File:
+    def __init__(self, id, size):
+        self.id = id
+        self.size = size
+
+
+class DiskMap2:
+    def __init__(self, line: str):
+        self.free_by_pos = dict()  # TODO: naming?
+        self.files_by_pos = dict()
+        is_file = True
+        total_pos = 0
+        file_id = 0
+        for block_len in line:
+            block_len = int(block_len)
+            if is_file:
+                self.files_by_pos.update({total_pos: File(file_id, block_len)})
+                file_id += 1
+            else:
+                self.free_by_pos.update({total_pos: block_len})
+
+            is_file = not is_file
+            total_pos += block_len
+
+    def generate_disk(self):
+        self.disk = [None] * (sum(self.free_by_pos.values()) + sum(f.size for f in self.files_by_pos.values()))
+
+        for pos, file in self.files_by_pos.items():
+            self.disk[pos: pos + file.size] = [file.id] * file.size
+
+    def __repr__(self):
+        self.generate_disk()
+        disk_repr = ['.' if d is None else str(d) for d in self.disk]
+
+        return "".join(disk_repr)
