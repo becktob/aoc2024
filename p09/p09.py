@@ -94,14 +94,13 @@ class DiskMap2:
         files = list(self.files_by_pos.values())
         files.sort(key=lambda f: f.id, reverse=True)
         for file in files:
-            free_items = list(self.free_by_pos.items())
-            free_items.sort(key=lambda item: item[0])
+            all_free_before = ((pos, l) for pos, l in self.free_by_pos.items() if pos < file.pos and l >= file.size)
             try:
-                free_before = next((pos, l) for pos, l in free_items if pos < file.pos and l >= file.size)
-            except StopIteration:
+                first_free_before = sorted(all_free_before, key= lambda item: item[0])[0]
+            except IndexError:
                 continue
 
-            pos_free, len_free = free_before
+            pos_free, len_free = first_free_before
 
             remaining_free_size = len_free - file.size
             remaining_free_pos = pos_free + file.size
