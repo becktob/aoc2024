@@ -1,7 +1,7 @@
 import unittest
 from unittest import TestCase
 
-from p09.p09 import DiskMap, solve_part_1, DiskMap2
+from p09.p09 import DiskMap, solve_part_1, DiskMap2, solve_part_2
 
 demo_input_9 = "2333133121414131402"
 demo_repr = "00...111...2...333.44.5555.6666.777.888899"
@@ -43,3 +43,13 @@ class TestDiskMap2(TestCase):
     def test_parse_repr(self):
         map = DiskMap2(demo_input_9)
         self.assertEqual(demo_repr, str(map))
+
+    def test_compact_all(self):
+        map = DiskMap2(demo_input_9)
+        map.compact_all()
+
+        step_n = "00992111777.44.333....5555.6666.....8888.."
+        self.assertEqual(step_n, str(map))
+
+    def test_solve_demo_part2(self):
+        self.assertEqual(2858, solve_part_2(demo_input_9))

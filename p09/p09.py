@@ -49,9 +49,10 @@ def solve_part_1(raw_input: str):
 
 
 class File:
-    def __init__(self, id, size):
+    def __init__(self, id, size, pos):
         self.id = id
         self.size = size
+        self.pos = pos
 
 
 class DiskMap2:
@@ -64,7 +65,7 @@ class DiskMap2:
         for block_len in line:
             block_len = int(block_len)
             if is_file:
-                self.files_by_pos.update({total_pos: File(file_id, block_len)})
+                self.files_by_pos.update({total_pos: File(file_id, block_len, total_pos)})
                 file_id += 1
             else:
                 self.free_by_pos.update({total_pos: block_len})
@@ -83,3 +84,32 @@ class DiskMap2:
         disk_repr = ['.' if d is None else str(d) for d in self.disk]
 
         return "".join(disk_repr)
+
+    def compact_all(self):
+        files = list(self.files_by_pos.values())
+        files.sort(key=lambda f: f.id, reverse=True)
+        for file in files:
+            free_before = [(pos, len) for pos, len in self.free_by_pos.items() if pos < file.pos and len >= file.size]
+            if len(free_before) > 0:  # Todo: find first only
+                pos_free, len_free = free_before[0]
+
+                remaining_free_size = len_free - file.size
+                remaining_free_pos = pos_free + file.size
+                self.free_by_pos.pop(pos_free)  # remove old free
+                self.free_by_pos.update({remaining_free_pos: remaining_free_size})  # add remaining free
+                # TODO: consolidate neighboring free blocks into one (not necessary for single pass?)
+
+                self.files_by_pos.pop(file.pos)  # remove file
+                self.free_by_pos.update({file.pos: file.size})  # replace file with free
+                file.pos = pos_free
+                self.files_by_pos.update({pos_free: file})  # insert file
+
+    def checksum(self):
+        self.generate_disk()
+        return sum(pos * id for pos, id in enumerate(self.disk) if id is not None)
+
+
+def solve_part_2(raw_input):
+    map = DiskMap2(raw_input.strip())
+    map.compact_all()
+    return map.checksum()
