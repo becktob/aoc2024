@@ -5,10 +5,15 @@ class DiskMap:
         self.files = {id: int(size) for id, size in enumerate(file_lengths)}
         self.free = {id: int(size) for id, size in enumerate(free_lengths)}
 
-    def __repr__(self):
-        disk_repr = [None] * (len(self.free) + len(self.files))
+        blocks = [None] * (len(self.free) + len(self.files))
+        file_content = [[id] * size for id, size in self.files.items()]
+        free_content = [[None] * size for size in self.free.values()]
+        blocks[::2] = file_content
+        blocks[1::2] = free_content
 
-        disk_repr[::2] = [str(id) * size for id, size in self.files.items()]
-        disk_repr[1::2] = ['.' * size for id, size in self.free.items()]
+        self.disk = [val for block in blocks for val in block]
+
+    def __repr__(self):
+        disk_repr = ['.' if d is None else str(d) for d in self.disk]
 
         return "".join(disk_repr)
