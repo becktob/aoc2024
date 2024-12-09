@@ -1,3 +1,6 @@
+import itertools
+
+
 class DiskMap:
     def __init__(self, line: str):
         file_lengths = line[::2]
@@ -17,3 +20,9 @@ class DiskMap:
         disk_repr = ['.' if d is None else str(d) for d in self.disk]
 
         return "".join(disk_repr)
+
+    def compact_one_step(self):
+        first_free = self.disk.index(None)
+        last_used = 1 + sum(1 for _ in itertools.takewhile(lambda i: i is None, self.disk[::-1]))
+        self.disk[first_free] = self.disk[-last_used]
+        self.disk[-last_used] = None
