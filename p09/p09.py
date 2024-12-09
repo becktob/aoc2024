@@ -40,7 +40,7 @@ class DiskMap:
         return sum(pos * id for pos, id in enumerate(self.disk) if id is not None)
 
 
-def solve_part_1(raw_input):
-    map = DiskMap(raw_input)
+def solve_part_1(raw_input: str):
+    map = DiskMap(raw_input.strip())
     map.compact_all()
     return map.checksum()
