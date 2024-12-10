@@ -38,3 +38,7 @@ def trailhead_scores(trails):
 def solve_part_1(raw_input):
     trails = find_trails(raw_input)
     return trailhead_scores(trails)
+
+
+def solve_part_2(raw_input):
+    return sum(1 for _ in find_trails(raw_input))
