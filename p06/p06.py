@@ -1,6 +1,6 @@
 import numpy
 
-from helpers import string_to_array
+from helpers import string_to_array, in_bounds
 
 directions = {'^': (-1, 0),
               '>': (0, +1),
@@ -17,8 +17,7 @@ def one_step(maze, current_position=None, current_direction=None):
     maze[*current_position] = 'X'  # may be overwritten on turn
 
     next_position = current_position + directions[current_direction]
-    in_bounds = ((0, 0) <= next_position).all() and (next_position < maze.shape).all()
-    if not in_bounds:
+    if not in_bounds(next_position, maze):
         return maze, None, None
 
     if maze[*next_position] != '#':  # forward

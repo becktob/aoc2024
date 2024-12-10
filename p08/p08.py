@@ -1,6 +1,6 @@
 import numpy
 
-from helpers import string_to_array
+from helpers import string_to_array, in_bounds
 
 
 def antinodes(map, any_multiple=False):
@@ -19,8 +19,7 @@ def antinodes(map, any_multiple=False):
                 node_locs = (a + n * a_to_b for n in range(-size, size))
 
             for n in node_locs:
-                in_bounds = ((0, 0) <= n).all() and (n < antinodes.shape).all()
-                if in_bounds:
+                if in_bounds(n, antinodes):
                     antinodes[*n] = 1
 
     return antinodes
