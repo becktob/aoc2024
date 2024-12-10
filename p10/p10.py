@@ -33,3 +33,8 @@ def trailhead_scores(trails):
         trailheads[tuple(trail[0])].add(tuple(trail[-1]))
 
     return sum((len(ends) for ends in trailheads.values()))
+
+
+def solve_part_1(raw_input):
+    trails = find_trails(raw_input)
+    return trailhead_scores(trails)
