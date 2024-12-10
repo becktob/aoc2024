@@ -1,7 +1,7 @@
 import numpy
 
 
-def string_to_array(content):
+def string_to_array(content, mapper=str):
     lines = content.strip().split('\n')
-    chars = [[c for c in l] for l in lines]
+    chars = [[mapper(c) for c in l] for l in lines]
     return numpy.array(chars)
