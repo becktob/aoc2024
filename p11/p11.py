@@ -1,3 +1,4 @@
+from functools import cache
 from typing import Iterable, Iterator
 
 
@@ -12,11 +13,18 @@ def blink(stones: Iterable[int]) -> Iterator[int]:
         else:
             yield stone * 2024
 
+@cache
+def num_stones(stone: int, blinks_todo: int):
+    if blinks_todo == 0:
+        return 1
+
+    stones_one_blink = blink([stone])
+
+    return sum(num_stones(s, blinks_todo-1) for s in stones_one_blink)
+
+
 
 def solve_part_1(raw_input: str):
     stones = map(int, raw_input.split())
 
-    for i in range(25):
-        stones = list(blink(stones))
-
-    return len(list(stones))
+    return sum(num_stones(s, 25) for s in stones)
