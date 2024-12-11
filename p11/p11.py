@@ -6,8 +6,7 @@ def blink(stones: Iterable[int]) -> Iterator[int]:
     for stone in stones:
         if stone == 0:
             yield 1
-        elif len(str(stone)) % 2 == 0:
-            digits = str(stone)
+        elif len(digits := str(stone)) % 2 == 0:
             half = len(digits) // 2
             yield from map(int, (digits[:half], digits[half:]))
         else:
