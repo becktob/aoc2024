@@ -18,3 +18,7 @@ class Test(TestCase):
     def test_solve_part_1(self):
         with open('p11/input') as f:
             self.assertEqual(217812, solve_part_1(f.read()))
+
+    def test_solve_part_2(self):
+        with open('p11/input') as f:
+            self.assertEqual(259112729857522, solve_part_1(f.read(), num_blinks=75))

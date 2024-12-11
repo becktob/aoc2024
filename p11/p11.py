@@ -13,6 +13,7 @@ def blink(stones: Iterable[int]) -> Iterator[int]:
         else:
             yield stone * 2024
 
+
 @cache
 def num_stones(stone: int, blinks_todo: int):
     if blinks_todo == 0:
@@ -20,11 +21,10 @@ def num_stones(stone: int, blinks_todo: int):
 
     stones_one_blink = blink([stone])
 
-    return sum(num_stones(s, blinks_todo-1) for s in stones_one_blink)
+    return sum(num_stones(s, blinks_todo - 1) for s in stones_one_blink)
 
 
-
-def solve_part_1(raw_input: str):
+def solve_part_1(raw_input: str, num_blinks=25):
     stones = map(int, raw_input.split())
 
-    return sum(num_stones(s, 25) for s in stones)
+    return sum(num_stones(s, num_blinks) for s in stones)
