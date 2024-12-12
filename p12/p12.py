@@ -2,7 +2,7 @@ from dataclasses import dataclass
 
 import numpy
 
-from helpers import string_to_array, in_bounds
+from helpers import string_to_array
 
 
 @dataclass
@@ -31,8 +31,8 @@ def count_sides(region_map):
     directions = ((0, 1), (0, -1), (1, 0), (-1, 0))
     shifted = [numpy.roll(padded_map, d, axis=(0, 1)) for d in directions]
     edge_maps = [1 == (1 * padded_map - 1 * s) for s in shifted]
-    regions_in_edge_map = [find_regions(e, False) for e in edge_maps]
-    edges = [r for rs in regions_in_edge_map for r in rs if r.letter == True]
+    regions_in_edge_map = [find_regions(e, False, search_for=True) for e in edge_maps]
+    edges = [r for rs in regions_in_edge_map for r in rs]
     return len(edges)
 
 
@@ -75,14 +75,16 @@ def flood_region(map, start_ij):
                 outside_border_map[*n] = True
 
     cropped_region_map = region_map[pad_size:-pad_size, pad_size:-pad_size]
-    border_pad_size = pad_size-1
+    border_pad_size = pad_size - 1
     cropped_border_map = outside_border_map[border_pad_size:-border_pad_size, border_pad_size:-border_pad_size]
     return cropped_region_map, cropped_border_map
 
 
-def find_regions(map: numpy.ndarray, do_side_count=False) -> list[Region]:
+def find_regions(map: numpy.ndarray, do_side_count=False, search_for=None) -> list[Region]:
     regions = []
     processed = numpy.zeros_like(map, dtype=bool)
+    if search_for is not None:
+        processed[map != search_for] = True
     while True:
         unprocessed_plots = numpy.argwhere(processed == False)
         if len(unprocessed_plots) == 0:
