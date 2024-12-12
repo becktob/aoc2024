@@ -10,6 +10,7 @@ class Region:
     letter: str
     size: int
     perimeter: int
+    sides: int
 
 
 def find_perimeter(plots) -> int:
@@ -23,6 +24,16 @@ def find_perimeter(plots) -> int:
 
     return borders
 
+
+def count_sides(region_map):
+    padded_map = numpy.pad(region_map,1, constant_values=False)
+
+    directions = ((0, 1), (0, -1), (1, 0), (-1, 0))
+    shifted = [numpy.roll(padded_map, d, axis=(0,1)) for d in directions]
+    edge_maps = [1 == (1*padded_map - 1*s) for s in shifted]
+    regions_in_edge_map = [find_regions(e, False) for e in edge_maps]
+    edges = [r for rs in regions_in_edge_map for r in rs if r.letter == True]
+    return len(edges)
 
 def distinct_regions(plots):  # unused
     regions = []
@@ -57,7 +68,7 @@ def flood_region(map, start_ij):
     return region_map
 
 
-def find_regions(map: numpy.ndarray) -> list[Region]:
+def find_regions(map: numpy.ndarray, do_side_count = True) -> list[Region]:
     regions = []
     processed = numpy.zeros_like(map, dtype=bool)
     while True:
@@ -68,7 +79,8 @@ def find_regions(map: numpy.ndarray) -> list[Region]:
         region = flood_region(map, start_ij := unprocessed_plots[0])
         processed[region] = True
         regions_indices = numpy.argwhere(region)
-        regions.append(Region(map[*start_ij], len(regions_indices), find_perimeter(regions_indices)))
+        num_sides = count_sides(region) if do_side_count else None
+        regions.append(Region(map[*start_ij], len(regions_indices), find_perimeter(regions_indices), num_sides))
 
     return regions
 
