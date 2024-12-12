@@ -49,6 +49,6 @@ class Test(TestCase):
 
     def test_count_sides(self):
         map = string_to_array(demo_input_12_1)
-        regions = find_regions(map)
+        regions = find_regions(map, True)
         sides = [r.sides for r in regions]
         self.assertListEqual([4, 4, 4, 4, 8], sorted(sides))

@@ -26,14 +26,15 @@ def find_perimeter(plots) -> int:
 
 
 def count_sides(region_map):
-    padded_map = numpy.pad(region_map,1, constant_values=False)
+    padded_map = numpy.pad(region_map, 1, constant_values=False)
 
     directions = ((0, 1), (0, -1), (1, 0), (-1, 0))
-    shifted = [numpy.roll(padded_map, d, axis=(0,1)) for d in directions]
-    edge_maps = [1 == (1*padded_map - 1*s) for s in shifted]
+    shifted = [numpy.roll(padded_map, d, axis=(0, 1)) for d in directions]
+    edge_maps = [1 == (1 * padded_map - 1 * s) for s in shifted]
     regions_in_edge_map = [find_regions(e, False) for e in edge_maps]
     edges = [r for rs in regions_in_edge_map for r in rs if r.letter == True]
     return len(edges)
+
 
 def distinct_regions(plots):  # unused
     regions = []
@@ -57,18 +58,29 @@ def flood_region(map, start_ij):
 
     val = map[*start_ij]
 
-    region_map = numpy.zeros_like(map, dtype=bool)
-    border_todo = [start_ij]
+    pad_size = 2
+    padded_map = numpy.pad(map, pad_size, constant_values='.')
+    padded_start_ij = start_ij + (pad_size, pad_size)
+
+    region_map = numpy.zeros_like(padded_map, dtype=bool)
+    outside_border_map = numpy.zeros_like(padded_map, dtype=bool)
+    border_todo = [padded_start_ij]
     while border_todo:
         this_border = border_todo.pop()
         region_map[*this_border] = True
-        for n in (this_border + d for d in directions if in_bounds(this_border + d, map)):
-            if map[*n] == val and not region_map[*n]:
+        for n in (this_border + d for d in directions):  # always in bounds for padded map
+            if padded_map[*n] == val and not region_map[*n]:
                 border_todo.append(n)
-    return region_map
+            if padded_map[*n] != val:
+                outside_border_map[*n] = True
+
+    cropped_region_map = region_map[pad_size:-pad_size, pad_size:-pad_size]
+    border_pad_size = pad_size-1
+    cropped_border_map = outside_border_map[border_pad_size:-border_pad_size, border_pad_size:-border_pad_size]
+    return cropped_region_map, cropped_border_map
 
 
-def find_regions(map: numpy.ndarray, do_side_count = True) -> list[Region]:
+def find_regions(map: numpy.ndarray, do_side_count=False) -> list[Region]:
     regions = []
     processed = numpy.zeros_like(map, dtype=bool)
     while True:
@@ -76,7 +88,7 @@ def find_regions(map: numpy.ndarray, do_side_count = True) -> list[Region]:
         if len(unprocessed_plots) == 0:
             break
 
-        region = flood_region(map, start_ij := unprocessed_plots[0])
+        region, _ = flood_region(map, start_ij := unprocessed_plots[0])
         processed[region] = True
         regions_indices = numpy.argwhere(region)
         num_sides = count_sides(region) if do_side_count else None
@@ -87,5 +99,5 @@ def find_regions(map: numpy.ndarray, do_side_count = True) -> list[Region]:
 
 def solve_part_1(raw_input):
     map = string_to_array(raw_input)
-    regions = find_regions(map)
+    regions = find_regions(map, do_side_count=False)
     return sum(r.size * r.perimeter for r in regions)
