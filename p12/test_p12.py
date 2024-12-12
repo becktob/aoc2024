@@ -1,7 +1,7 @@
 from unittest import TestCase
 
 from helpers import string_to_array
-from p12.p12 import find_areas
+from p12.p12 import find_areas, solve_part_1
 
 demo_input_12_1 = """AAAA
 BBCD
@@ -22,3 +22,6 @@ class Test(TestCase):
         areas = find_areas(map)
         perimeters = [a.perimeter for a in areas]
         self.assertListEqual([4, 8, 8, 10, 10], sorted(perimeters))
+
+    def solve_demo_1_1(self):
+        self.assertEqual(140, solve_part_1(demo_input_12_1))
