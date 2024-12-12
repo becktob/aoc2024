@@ -2,7 +2,7 @@ from dataclasses import dataclass
 
 import numpy
 
-from helpers import string_to_array
+from helpers import string_to_array, in_bounds
 
 
 @dataclass
@@ -24,7 +24,7 @@ def find_perimeter(plots) -> int:
     return borders
 
 
-def distinct_regions(plots):
+def distinct_regions(plots):  # unused
     regions = []
 
     directions = ((0, 1), (0, -1), (1, 0), (-1, 0))
@@ -41,14 +41,34 @@ def distinct_regions(plots):
     return [[numpy.array(p) for p in r] for r in regions]  # back to list of arrays
 
 
-def find_regions(map: numpy.ndarray) -> list[Region]:
-    letters = set(map.flatten())
+def flood_region(map, start_ij):
+    directions = ((0, 1), (0, -1), (1, 0), (-1, 0))
 
+    val = map[*start_ij]
+
+    region_map = numpy.zeros_like(map, dtype=bool)
+    border_todo = [start_ij]
+    while border_todo:
+        this_border = border_todo.pop()
+        region_map[*this_border] = True
+        for n in (this_border + d for d in directions if in_bounds(this_border + d, map)):
+            if map[*n] == val and not region_map[*n]:
+                border_todo.append(n)
+    return region_map
+
+
+def find_regions(map: numpy.ndarray) -> list[Region]:
     regions = []
-    for letter in letters:
-        plots = numpy.argwhere(map == letter)
-        for region in distinct_regions(plots):
-            regions.append(Region(letter, len(region), find_perimeter(region)))
+    processed = numpy.zeros_like(map, dtype=bool)
+    while True:
+        unprocessed_plots = numpy.argwhere(processed == False)
+        if len(unprocessed_plots) == 0:
+            break
+
+        region = flood_region(map, start_ij := unprocessed_plots[0])
+        processed[region] = True
+        regions_indices = numpy.argwhere(region)
+        regions.append(Region(map[*start_ij], len(regions_indices), find_perimeter(regions_indices)))
 
     return regions
 

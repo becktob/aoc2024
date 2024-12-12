@@ -1,3 +1,4 @@
+import unittest
 from unittest import TestCase
 
 from helpers import string_to_array
@@ -40,3 +41,7 @@ class Test(TestCase):
 
     def test_solve_demo_1_3(self):
         self.assertEqual(1930, solve_part_1(demo_input_12_3))
+
+    def test_solve_part_1(self):
+        with open('p12/input') as f:
+            self.assertEqual(1363484, solve_part_1(f.read()))
