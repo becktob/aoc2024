@@ -103,3 +103,9 @@ def solve_part_1(raw_input):
     map = string_to_array(raw_input)
     regions = find_regions(map, do_side_count=False)
     return sum(r.size * r.perimeter for r in regions)
+
+
+def solve_part_2(raw_input):
+    map = string_to_array(raw_input)
+    regions = find_regions(map, do_side_count=True)
+    return sum(r.size * r.sides for r in regions)
