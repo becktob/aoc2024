@@ -9,6 +9,18 @@ BBCC
 EEEC
 """
 
+demo_input_12_3 = """RRRRIICCFF
+RRRRIICCCF
+VVRRRCCFFF
+VVRCCCJFFF
+VVVVCJJCFE
+VVIVCCJJEE
+VVIIICJJEE
+MIIIIIJJEE
+MIIISIJEEE
+MMMISSJEEE
+"""
+
 
 class Test(TestCase):
     def test_find_region_sizes(self):
@@ -23,5 +35,8 @@ class Test(TestCase):
         perimeters = [r.perimeter for r in regions]
         self.assertListEqual([4, 8, 8, 10, 10], sorted(perimeters))
 
-    def solve_demo_1_1(self):
+    def test_solve_demo_1_1(self):
         self.assertEqual(140, solve_part_1(demo_input_12_1))
+
+    def test_solve_demo_1_3(self):
+        self.assertEqual(1930, solve_part_1(demo_input_12_3))
