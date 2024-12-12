@@ -6,7 +6,7 @@ from helpers import string_to_array
 
 
 @dataclass
-class Area:
+class Region:
     letter: str
     size: int
     perimeter: int
@@ -24,18 +24,18 @@ def find_perimeter(plots) -> int:
     return borders
 
 
-def find_areas(map: numpy.ndarray) -> list[Area]:
+def find_regions(map: numpy.ndarray) -> list[Region]:
     letters = set(map.flatten())
 
-    areas = []
+    regions = []
     for letter in letters:
         plots = numpy.argwhere(map == letter)
-        areas.append(Area(letter, len(plots), find_perimeter(plots)))
+        regions.append(Region(letter, len(plots), find_perimeter(plots)))
 
-    return areas
+    return regions
 
 
 def solve_part_1(raw_input):
     map = string_to_array(raw_input)
-    areas = find_areas(map)
-    return [a.size * a.perimeter for a in areas]
+    regions = find_regions(map)
+    return [r.size * r.perimeter for r in regions]
