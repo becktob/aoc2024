@@ -26,5 +26,12 @@ class ClawMachine:
 
     def cheapest_solution_cost(self):
         solutions = self.solutions_ab()
-        costs = (3*a + b for a,b in solutions)
-        return min(costs)
+        costs = (3 * a + b for a, b in solutions)
+        return min(costs, default=0)
+
+
+def solve_part_1(raw_input):
+    raw_machines = raw_input.split('\n\n')
+    machines = [ClawMachine(r) for r in raw_machines]
+
+    return sum(m.cheapest_solution_cost() for m in machines)
