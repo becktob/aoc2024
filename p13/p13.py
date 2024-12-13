@@ -17,12 +17,17 @@ class ClawMachine:
         self.xy_prize = parse_xy(raw_prize)
 
     def solutions_ab(self):
-        for n_a in range(100):
-            loc_a = numpy.array(self.xy_a) * n_a
-            for n_b in range(100):
-                loc_b = numpy.array(self.xy_b) * n_b
-                if all(loc_b + loc_a == self.xy_prize):
-                    yield n_a, n_b
+        px, py = self.xy_prize
+        ax, ay = self.xy_a
+        bx, by = self.xy_b
+        n_a = (px - bx / by * py) / (ax - bx / by * ay)
+        n_a = round(n_a)
+
+        loc_a = numpy.array(self.xy_a) * n_a
+        for n_b in range(100):
+            loc_b = numpy.array(self.xy_b) * n_b
+            if all(loc_b + loc_a == self.xy_prize):
+                yield n_a, n_b
 
     def cheapest_solution_cost(self):
         solutions = self.solutions_ab()
