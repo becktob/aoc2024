@@ -20,16 +20,11 @@ class ClawMachine:
         px, py = self.xy_prize
         ax, ay = self.xy_a
         bx, by = self.xy_b
-        n_a = (px - bx / by * py) / (ax - bx / by * ay)
-        n_a = round(n_a)
 
-        loc_a = numpy.array(self.xy_a) * n_a
+        n_a = (by * px - bx * py) // (by * ax - bx * ay)
+        n_b = - (ay * px - ax * py) // (by * ax - bx * ay)
 
-        n_b = (px - ax * n_a) / bx
-        n_b = round(n_b)
-
-        loc_b = numpy.array(self.xy_b) * n_b
-        if all(loc_b + loc_a == self.xy_prize):
+        if n_a * ax + n_b * bx == px and n_a * ay + n_b * by == py:
             return ((n_a, n_b),)
         else:
             return ()
