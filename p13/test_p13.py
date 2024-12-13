@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from p13.p13 import ClawMachine, solve_part_1
+from p13.p13 import ClawMachine, solve_part_1, solve_part_2
 
 raw_input_1 = """Button A: X+94, Y+34
 Button B: X+22, Y+67
@@ -43,3 +43,10 @@ class TestClawMachine(TestCase):
     def test_solve_part_1(self):
         with open('p13/input') as f:
             self.assertEqual(28753, solve_part_1(f.read()))
+
+    def test_solve_demo_2(self):
+        self.assertEqual(875318608908, solve_part_2(demo_input_13))
+
+    def test_solve_part_2(self):
+        with open('p13/input') as f:
+            self.assertEqual(102718967795500, solve_part_2(f.read()))

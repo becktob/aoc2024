@@ -45,3 +45,12 @@ def solve_part_1(raw_input):
     machines = [ClawMachine(r) for r in raw_machines]
 
     return sum(m.cheapest_solution_cost() for m in machines)
+
+
+def solve_part_2(raw_input):
+    raw_machines = raw_input.strip().split('\n\n')
+    machines = [ClawMachine(r) for r in raw_machines]
+    for m in machines:
+        m.xy_prize = tuple(xy + 10000000000000 for xy in m.xy_prize)
+
+    return sum(m.cheapest_solution_cost() for m in machines)
