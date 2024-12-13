@@ -39,3 +39,7 @@ class TestClawMachine(TestCase):
 
     def test_solve_demo_1(self):
         self.assertEqual(480, solve_part_1(demo_input_13))
+
+    def test_solve_part_1(self):
+        with open('p13/input') as f:
+            self.assertEqual(28753, solve_part_1(f.read()))

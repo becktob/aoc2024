@@ -31,7 +31,7 @@ class ClawMachine:
 
 
 def solve_part_1(raw_input):
-    raw_machines = raw_input.split('\n\n')
+    raw_machines = raw_input.strip().split('\n\n')
     machines = [ClawMachine(r) for r in raw_machines]
 
     return sum(m.cheapest_solution_cost() for m in machines)
