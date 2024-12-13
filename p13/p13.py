@@ -23,3 +23,8 @@ class ClawMachine:
                 loc_b = numpy.array(self.xy_b) * n_b
                 if all(loc_b + loc_a == self.xy_prize):
                     yield n_a, n_b
+
+    def cheapest_solution_cost(self):
+        solutions = self.solutions_ab()
+        costs = (3*a + b for a,b in solutions)
+        return min(costs)
