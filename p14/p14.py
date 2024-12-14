@@ -38,3 +38,28 @@ def solve_part_1(raw_input: str, room_size=(101, 103)):
     se = [r for r in robots if x_half < r.x and y_half < r.y]
 
     return reduce(operator.mul, map(len, (nw, ne, sw, se)), 1)
+
+
+def draw_room(raw_input: str, room_size=(101, 103)):
+    robots = [Robot(r) for r in raw_input.splitlines()]
+
+    for step in range(1000):
+        print(f'### {step=} ###')
+        [r.move(1, room_size) for r in robots]
+
+        for y in range(room_size[1]):
+            line = ''
+            for x in range(room_size[0]):
+                robots_here = sum(1 for r in robots if r.p_xy == (x, y))
+                line += str(robots_here) if robots_here > 0 else ' '
+            print(line)
+        input(f"That was {step=} any key")
+
+
+if __name__ == '__main__':
+    with open('p14/input') as f:
+        draw_room(f.read())
+
+    # Observe two periods:
+    # 12 + n * 101
+    # 64 + m * 103
