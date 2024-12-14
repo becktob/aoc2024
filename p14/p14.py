@@ -41,11 +41,16 @@ def solve_part_1(raw_input: str, room_size=(101, 103)):
 
 
 def draw_room(raw_input: str, room_size=(101, 103)):
-    robots = [Robot(r) for r in raw_input.splitlines()]
 
-    for step in range(1000):
+    step = 0
+    while True:
+        step += 1
+        if not(step % 101 == 13 and step % 103 == 65):
+            continue
+
         print(f'### {step=} ###')
-        [r.move(1, room_size) for r in robots]
+        robots = [Robot(r) for r in raw_input.splitlines()]
+        [r.move(step, room_size) for r in robots]
 
         for y in range(room_size[1]):
             line = ''
