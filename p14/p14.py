@@ -32,7 +32,7 @@ def solve_part_1(raw_input: str, room_size=(101, 103)):
 
     x_half = room_size[0] // 2
     y_half = room_size[1] // 2
-    nw = [r for r in robots if 0 <= r.x < x_half and 0 < r.y < y_half]
+    nw = [r for r in robots if 0 <= r.x < x_half and 0 <= r.y < y_half]
     ne = [r for r in robots if x_half < r.x and 0 <= r.y < y_half]
     sw = [r for r in robots if 0 <= r.x < x_half and y_half < r.y]
     se = [r for r in robots if x_half < r.x and y_half < r.y]
