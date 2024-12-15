@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from p15.p15 import parse, solve_part_1
+from p15.p15 import parse, solve_part_1, parse2
 
 demo_15_small = """########
 #..O.O.#
@@ -12,6 +12,16 @@ demo_15_small = """########
 ########
 
 <^^>>>vv<v>>v<<"""
+
+demo_15_part_2 = """#######
+#...#.#
+#.....#
+#..OO@#
+#..O..#
+#.....#
+#######
+
+<vv<<^^<<^^"""
 
 
 class TestWarehouse(TestCase):
@@ -35,3 +45,18 @@ class TestWarehouse(TestCase):
     def test_solve_part_1(self):
         with open('p15/input') as f:
             self.assertEqual(1318523, solve_part_1(f.read()))
+
+
+class TestWarehouse2(TestCase):
+    def test_parse(self):
+        warehouse, commands = parse2(demo_15_part_2)
+        self.assertEqual('@', warehouse.map[3, 10])
+        self.assertEqual('<', commands[0])
+
+    def test_step(self):
+        warehouse, commands = parse2(demo_15_part_2)
+
+        for c in commands:
+            warehouse.step(c)
+
+        self.assertListEqual([2, 5], warehouse.robot_ij().tolist())
