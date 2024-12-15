@@ -37,7 +37,19 @@ class Warehouse:
     def robot_ij(self):
         return numpy.argwhere(self.map == '@')[0]
 
+    def boxes_ij(self):
+        return numpy.argwhere(self.map == 'O')
+
 
 def parse(raw_input) -> (Warehouse, list[str]):
     raw_warehouse, raw_commands = raw_input.split('\n\n')
     return Warehouse(raw_warehouse), list(raw_commands.strip())
+
+
+def solve_part_1(raw_input):
+    warehouse, commands = parse(raw_input)
+
+    for c in commands:
+        warehouse.step(c)
+
+    return sum(100 * ij[0] + ij[1] for ij in warehouse.boxes_ij())

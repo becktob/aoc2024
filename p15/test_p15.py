@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from p15.p15 import parse
+from p15.p15 import parse, solve_part_1
 
 demo_15_small = """########
 #..O.O.#
@@ -28,3 +28,6 @@ class TestWarehouse(TestCase):
             warehouse.step(c)
 
         self.assertListEqual([4, 4], warehouse.robot_ij().tolist())
+
+    def test_solve_demo_1_small(self):
+        self.assertEqual(2028, solve_part_1(demo_15_small))
