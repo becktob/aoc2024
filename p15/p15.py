@@ -43,7 +43,7 @@ class Warehouse:
 
 def parse(raw_input) -> (Warehouse, list[str]):
     raw_warehouse, raw_commands = raw_input.split('\n\n')
-    return Warehouse(raw_warehouse), list(raw_commands.strip())
+    return Warehouse(raw_warehouse), list(raw_commands.replace('\n',''))
 
 
 def solve_part_1(raw_input):

@@ -31,3 +31,7 @@ class TestWarehouse(TestCase):
 
     def test_solve_demo_1_small(self):
         self.assertEqual(2028, solve_part_1(demo_15_small))
+
+    def test_solve_part_1(self):
+        with open('p15/input') as f:
+            self.assertEqual(1318523, solve_part_1(f.read()))
