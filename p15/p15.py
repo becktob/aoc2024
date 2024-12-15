@@ -93,13 +93,11 @@ class Warehouse2:
 
         moving_from_this_row = [ij_push]
         while True:
-            other_halves = []
-            for ij in moving_from_this_row:
+            for ij in moving_from_this_row[:]:
                 if (val := self.map[*ij]) == '[' and move == 'v' or val == ']' and move == '^':
-                    other_halves.append(ij + (0, 1))
+                    moving_from_this_row.append(ij + (0, 1))
                 elif val == '[' and move == '^' or val == ']' and move == 'v':
-                    other_halves.append(ij + (0, -1))
-            moving_from_this_row.extend(other_halves)
+                    moving_from_this_row.append(ij + (0, -1))
 
             all_moving_boxes.extend(moving_from_this_row)
 
