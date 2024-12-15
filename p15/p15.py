@@ -70,8 +70,18 @@ class Warehouse2:
 
         robot_ij = self.robot_ij()
         robot_target = robot_ij + (1, 0)
-        if self.could_move_into(robot_target, move):
-            self.do_move_into(robot_target, move)
+
+        moving_boxes = self.would_move_boxes(robot_ij + (1, 0), move)
+
+        if moving_boxes:
+            if isinstance(moving_boxes, list):
+                moving_boxes = numpy.array(moving_boxes)
+                indexes_from = moving_boxes.transpose()
+                indexes_to = (moving_boxes + (1, 0)).transpose()
+                boxes = self.map[*indexes_from]
+                self.map[*indexes_from] = ['.'] * moving_boxes.shape[0]
+                self.map[*indexes_to] = boxes
+
             self.map[*robot_ij] = '.'
             self.map[*robot_target] = '@'
 
@@ -83,46 +93,35 @@ class Warehouse2:
     def boxes_ij(self):
         return numpy.argwhere(self.map == '[')
 
-    def could_move_into(self, ij, move):
-        if (val := self.map[*ij]) == '.':
-            return True
-        elif val == '#':
+    def would_move_boxes(self, ij_push, move) -> bool | list:
+        if self.map[*ij_push] == '#':
             return False
+        if self.map[*ij_push] == '.':
+            return True
 
-        ij_other_half = None
-        if val == '[' and move == 'v' or val == ']' and move == '^':
-            ij_other_half = ij + (0, 1)
-        elif val == '[' and move == '^' or val == ']' and move == 'v':
-            ij_other_half = ij + (0, -1)
+        all_moving_boxes = []
 
-        can_move_other_half = True if ij_other_half is None else self.could_move_into(ij_other_half + (1, 0), move)
-        can_move_self = self.could_move_into(ij + (1, 0), move)
+        moving_from_this_row = [ij_push]
+        while True:
+            other_halves = []
+            for ij in moving_from_this_row:
+                if (val := self.map[*ij]) == '[' and move == 'v' or val == ']' and move == '^':
+                    other_halves.append(ij + (0, 1))
+                elif val == '[' and move == '^' or val == ']' and move == 'v':
+                    other_halves.append(ij + (0, -1))
+            moving_from_this_row.extend(other_halves)
 
-        return can_move_self and can_move_other_half
+            all_moving_boxes.extend(moving_from_this_row)
 
-    def do_move_into(self, ij, move):
-        if (val := self.map[*ij]) == '.':
-            return
-        elif val == '#':
-            raise RuntimeError
+            need_to_move_into_in_next_row = [m + (1, 0) for m in moving_from_this_row]
+            if any('#' == self.map[*n] for n in need_to_move_into_in_next_row):
+                return False
 
-        ij_other_half = None
-        if val == '[' and move == 'v' or val == ']' and move == '^':
-            ij_other_half = ij + (0, 1)
-        elif val == '[' and move == '^' or val == ']' and move == 'v':
-            ij_other_half = ij + (0, -1)
+            boxes_need_to_move_next_row = [n for n in need_to_move_into_in_next_row if self.map[*n] in ('[', ']')]
+            if len(boxes_need_to_move_next_row) == 0:
+                return all_moving_boxes
 
-        self.do_move_into(ij + (1, 0), move)
-        if ij_other_half is not None:
-            self.do_move_into(ij_other_half + (1, 0), move)
-
-        self.map[*ij] = '.'
-        self.map[*(ij + (1, 0))] = val
-
-        if ij_other_half is not None:
-            val_other_half = '[' if val == ']' else ']'
-            self.map[*ij_other_half] = '.'
-            self.map[*(ij_other_half + (1, 0))] = val_other_half
+            moving_from_this_row = boxes_need_to_move_next_row
 
 
 def parse2(raw_input) -> (Warehouse, list[str]):
@@ -137,4 +136,4 @@ def solve_part_2(raw_input):
     for c in commands:
         warehouse.step(c)
 
-    return sum(100*ij[0] + ij[1] for ij in warehouse.boxes_ij())
+    return sum(100 * ij[0] + ij[1] for ij in warehouse.boxes_ij())
