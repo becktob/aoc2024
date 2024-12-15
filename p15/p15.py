@@ -9,19 +9,17 @@ class Warehouse:
         self.map = string_to_array(map_string)
 
     def step(self, move: str):
-        direction_chars = {'v': (1, 0),
-                           '^': (-1, 0),
-                           '>': (0, 1),
-                           '<': (0, -1)}
-        direction = direction_chars[move]
+        rot90_so_motion_is_down = {'v': 0,
+                                   '^': 2,
+                                   '>': 3,
+                                   '<': 1}
+        n_rot = rot90_so_motion_is_down[move]
+        self.map = numpy.rot90(self.map, n_rot)
 
         robot_ij = self.robot_ij()
 
-        slice_i = slice(robot_ij[0], None, direction[0]) if direction[0] else robot_ij[0]
-        slice_j = slice(robot_ij[1], None, direction[1]) if direction[1] else robot_ij[1]
-
         # only tiles [robot...wall] can change -> make problem 1d
-        robot_to_wall = "".join(self.map[slice_i, slice_j])
+        robot_to_wall = "".join(self.map[robot_ij[0]:, robot_ij[1]])
 
         first_wall = robot_to_wall.find('#')
         first_space = robot_to_wall.find('.')
@@ -32,7 +30,9 @@ class Warehouse:
             remains = robot_to_wall[first_space + 1:]
             robot_to_wall_after = '.' + moved + remains
 
-            self.map[slice_i, slice_j] = list(robot_to_wall_after)
+            self.map[robot_ij[0]:, robot_ij[1]] = list(robot_to_wall_after)
+
+        self.map = numpy.rot90(self.map, -n_rot)
 
     def robot_ij(self):
         return numpy.argwhere(self.map == '@')[0]
@@ -43,7 +43,7 @@ class Warehouse:
 
 def parse(raw_input) -> (Warehouse, list[str]):
     raw_warehouse, raw_commands = raw_input.split('\n\n')
-    return Warehouse(raw_warehouse), list(raw_commands.replace('\n',''))
+    return Warehouse(raw_warehouse), list(raw_commands.replace('\n', ''))
 
 
 def solve_part_1(raw_input):
