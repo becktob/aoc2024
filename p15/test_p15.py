@@ -20,3 +20,7 @@ class TestWarehouse(TestCase):
         self.assertEqual('@', warehouse.map[2, 2])
         self.assertEqual('<', commands[0])
         self.assertEqual('<', commands[-1])
+
+    def test_step(self):
+        warehouse, commands = parse(demo_15_small)
+        warehouse.step(commands[0])
