@@ -68,22 +68,14 @@ class Warehouse2:
         n_rot = rot90_so_motion_is_down[move]
         self.map = numpy.rot90(self.map, n_rot)
 
-        robot_ij = self.robot_ij()
-        robot_target = robot_ij + (1, 0)
+        to_move = self.things_to_move(self.robot_ij(), move)
 
-        moving_boxes = self.would_move_boxes(robot_ij + (1, 0), move)
-
-        if moving_boxes:
-            if isinstance(moving_boxes, list):
-                moving_boxes = numpy.array(moving_boxes)
-                indexes_from = moving_boxes.transpose()
-                indexes_to = (moving_boxes + (1, 0)).transpose()
-                boxes = self.map[*indexes_from]
-                self.map[*indexes_from] = ['.'] * moving_boxes.shape[0]
-                self.map[*indexes_to] = boxes
-
-            self.map[*robot_ij] = '.'
-            self.map[*robot_target] = '@'
+        if to_move.size > 0:
+            indexes_from = to_move.transpose()
+            indexes_to = (to_move + (1, 0)).transpose()
+            content = self.map[*indexes_from]
+            self.map[*indexes_from] = ['.'] * to_move.shape[0]
+            self.map[*indexes_to] = content
 
         self.map = numpy.rot90(self.map, -n_rot)
 
@@ -93,11 +85,9 @@ class Warehouse2:
     def boxes_ij(self):
         return numpy.argwhere(self.map == '[')
 
-    def would_move_boxes(self, ij_push, move) -> bool | list:
+    def things_to_move(self, ij_push, move) -> numpy.ndarray:
         if self.map[*ij_push] == '#':
-            return False
-        if self.map[*ij_push] == '.':
-            return True
+            return numpy.array([])
 
         all_moving_boxes = []
 
@@ -115,11 +105,11 @@ class Warehouse2:
 
             need_to_move_into_in_next_row = [m + (1, 0) for m in moving_from_this_row]
             if any('#' == self.map[*n] for n in need_to_move_into_in_next_row):
-                return False
+                return numpy.array([])
 
             boxes_need_to_move_next_row = [n for n in need_to_move_into_in_next_row if self.map[*n] in ('[', ']')]
             if len(boxes_need_to_move_next_row) == 0:
-                return all_moving_boxes
+                return numpy.array(all_moving_boxes)
 
             moving_from_this_row = boxes_need_to_move_next_row
 
