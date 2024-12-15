@@ -81,7 +81,7 @@ class Warehouse2:
         return numpy.argwhere(self.map == '@')[0]
 
     def boxes_ij(self):
-        raise NotImplementedError
+        return numpy.argwhere(self.map == '[')
 
     def could_move_into(self, ij, move):
         if (val := self.map[*ij]) == '.':
@@ -129,3 +129,12 @@ def parse2(raw_input) -> (Warehouse, list[str]):
     raw_warehouse, raw_commands = raw_input.split('\n\n')
     raw_warehouse = raw_warehouse.replace('#', '##').replace('O', '[]').replace('.', '..').replace('@', '@.')
     return Warehouse2(raw_warehouse), list(raw_commands.replace('\n', ''))
+
+
+def solve_part_2(raw_input):
+    warehouse, commands = parse2(raw_input)
+
+    for c in commands:
+        warehouse.step(c)
+
+    return sum(100*ij[0] + ij[1] for ij in warehouse.boxes_ij())

@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from p15.p15 import parse, solve_part_1, parse2
+from p15.p15 import parse, solve_part_1, parse2, solve_part_2
 
 demo_15_small = """########
 #..O.O.#
@@ -22,6 +22,28 @@ demo_15_part_2 = """#######
 #######
 
 <vv<<^^<<^^"""
+
+demo_15_large = """##########
+#..O..O.O#
+#......O.#
+#.OO..O.O#
+#..O@..O.#
+#O#..O...#
+#O..O..O.#
+#.OO.O.OO#
+#....O...#
+##########
+
+<vv>^<v^>v>^vv^v>v<>v^v<v<^vv<<<^><<><>>v<vvv<>^v^>^<<<><<v<<<v^vv^v>^
+vvv<<^>^v^^><<>>><>^<<><^vv^^<>vvv<>><^^v>^>vv<>v<<<<v<^v>^<^^>>>^<v<v
+><>vv>v^v^<>><>>>><^^>vv>v<^^^>>v^v^<^^>v^^>v^<^v>v<>>v^v^<v>v^^<^^vv<
+<<v<^>>^^^^>>>v^<>vvv^><v<<<>^^^vv^<vvv>^>v<^^^^v<>^>vvvv><>>v^<<^^^^^
+^><^><>>><>^^<<^^v>>><^<v>^<vv>>v>>>^v><>^v><<<<v>>v<v<v>vvv>^<><<>^><
+^>><>^v<><^vvv<^^<><v<<<<<><^v<<<><<<^^<v<^^^><^>>^<v^><<<^>>^v<v^v<v^
+>^>>^v>vv>^<<^v<>><<><<v<<v><>v<^vv<<<>^^v^>^^>>><<^v>>v^v><^^>>^<>vv^
+<><^^>^^^<><vvvvv^v<v<<>^v<v>v<<^><<><<><<<^^<<<^<<>><<><^^^>^^<>^>v<>
+^^>vv<^v^v<vv>^<><v<^v>^^^>>>^^vvv^>vvv<>>>^<^>>>>>^<<^v>^vvv<>^<><<v>
+v^^>>><<^^<>>^v^<v^vv<>v^<<>^<^v^v><^<<<><<^<v><v<>vv>>v><v^<vv<>v^<<^"""
 
 
 class TestWarehouse(TestCase):
@@ -60,3 +82,11 @@ class TestWarehouse2(TestCase):
             warehouse.step(c)
 
         self.assertListEqual([2, 5], warehouse.robot_ij().tolist())
+
+
+    def test_solve_demo_2_large(self):
+        self.assertEqual(9021, solve_part_2(demo_15_large))
+
+    def test_solve_part_2(self):
+        with open('p15/input') as f:
+            self.assertEqual(1337648, solve_part_2(f.read()))
