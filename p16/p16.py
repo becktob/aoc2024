@@ -51,6 +51,7 @@ class Maze:
         self.start_ij = numpy.argwhere(self.map == 'S')[0]
 
         self.paths_in_progress = []
+        self.costs_in_progress = []
         self.complete_paths = []
 
     @cache
@@ -58,13 +59,15 @@ class Maze:
         starting_reindeer = Reindeer(self.start_ij, (0, 1))
 
         self.paths_in_progress = [[starting_reindeer]]
+        self.costs_in_progress = [0]   #  a bit flaky: two parallel lists. But: "... in paths_in_progress' seems cheaper this way
         costs_to_here: dict[Reindeer, int] = defaultdict(lambda: sys.maxsize)
 
         while self.paths_in_progress:
             path = self.paths_in_progress.pop(0)
+            cost = self.costs_in_progress.pop(0)
             r = path[-1]
 
-            if path_cost(path) > costs_to_here[r]:
+            if cost > costs_to_here[r]:
                 continue
 
             if (r.pos_ij == self.end_ij).all():
@@ -89,11 +92,12 @@ class Maze:
             for next_step in possible_steps:
                 if self.map[*next_step.pos_ij] != '#' and next_step not in path:
                     extended_path = path + [next_step]
-                    cost = path_cost(extended_path)
-                    if cost > costs_to_here[next_step]:
+                    extended_cost = path_cost(extended_path)
+                    if extended_cost > costs_to_here[next_step]:
                         continue
-                    costs_to_here[next_step] = cost
+                    costs_to_here[next_step] = extended_cost
                     self.paths_in_progress.append(extended_path)
+                    self.costs_in_progress.append(extended_cost)
 
         return self.complete_paths
 
