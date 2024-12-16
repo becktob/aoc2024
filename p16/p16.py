@@ -76,14 +76,14 @@ class Maze:
                 continue
 
             reindeer_forward = Reindeer(r.pos_ij + r.facing, r.facing)
-            reindeer_left = Reindeer(r.pos_ij, r.left())
-            reindeer_right = Reindeer(r.pos_ij, r.right())
+            reindeer_left = Reindeer(r.pos_ij + (face_left := r.left()), face_left)
+            reindeer_right = Reindeer(r.pos_ij + (face_right := r.right()), face_right)
 
             turned_last_step = len(path) > 1 and (path[-1].pos_ij == path[-2].pos_ij).all()
             possible_steps = [(reindeer_forward, 1)]
             if not turned_last_step:
-                possible_steps.append((reindeer_left, 1000))
-                possible_steps.append((reindeer_right, 1000))
+                possible_steps.append((reindeer_left, 1001))
+                possible_steps.append((reindeer_right, 1001))
 
             for next_step, add_cost in possible_steps:
                 if self.map[*next_step.pos_ij] != '#' and next_step not in path:
