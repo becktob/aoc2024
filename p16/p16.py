@@ -59,7 +59,8 @@ class Maze:
         starting_reindeer = Reindeer(self.start_ij, (0, 1))
 
         self.paths_in_progress = [[starting_reindeer]]
-        self.costs_in_progress = [0]   #  a bit flaky: two parallel lists. But: "... in paths_in_progress' seems cheaper this way
+        # a bit flaky: two parallel lists. But: "... in paths_in_progress' seems cheaper this way
+        self.costs_in_progress = [0]
         costs_to_here: dict[Reindeer, int] = defaultdict(lambda: sys.maxsize)
 
         while self.paths_in_progress:
@@ -71,7 +72,7 @@ class Maze:
                 continue
 
             if (r.pos_ij == self.end_ij).all():
-                self.complete_paths.append(path)
+                self.complete_paths.append((cost, path))
                 continue
 
             reindeer_forward = Reindeer(r.pos_ij + r.facing, r.facing)
@@ -79,7 +80,7 @@ class Maze:
             reindeer_right = Reindeer(r.pos_ij, r.right())
 
             turned_last_step = len(path) > 1 and (path[-1].pos_ij == path[-2].pos_ij).all()
-            possible_steps = [(reindeer_forward,1)]
+            possible_steps = [(reindeer_forward, 1)]
             if not turned_last_step:
                 possible_steps.append((reindeer_left, 1000))
                 possible_steps.append((reindeer_right, 1000))
@@ -104,30 +105,18 @@ class Maze:
         return self.complete_paths
 
 
-def path_cost(path: list[Reindeer]):
-    is_turn = [a.facing != b.facing for a, b in zip(path[1:], path[:-1])]
-
-    turns = sum(1 for turn in is_turn if turn)
-    steps = sum(1 for turn in is_turn if not turn)
-
-    return 1000 * turns + 1 * steps
-
-
 def solve_part_1(raw_input):
     maze = Maze(raw_input)
-    paths = maze.solve()
-
-    costs = [path_cost(p) for p in paths]
+    costs, paths = zip(*maze.solve())
     return min(costs)
 
 
 def solve_part_2(raw_input):
     maze = Maze(raw_input)
-    paths = maze.solve()
+    cost_paths = maze.solve()
 
-    costs = [path_cost(p) for p in paths]
-    lowest_cost = min(costs)
-    cheapest_paths = [p for p, c in zip(paths, costs) if c == lowest_cost]
+    lowest_cost = min(c for c, _ in cost_paths)
+    cheapest_paths = [p for c, p in cost_paths if c == lowest_cost]
 
     locations = set()
     for path in cheapest_paths:
