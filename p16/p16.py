@@ -79,8 +79,10 @@ class Maze:
             reindeer_right = Reindeer(r.pos_ij, r.right())
 
             turned_last_step = len(path) > 1 and (path[-1].pos_ij == path[-2].pos_ij).all()
-            possible_steps = (reindeer_forward,) if turned_last_step else (
-                reindeer_forward, reindeer_left, reindeer_right)
+            possible_steps = [(reindeer_forward,1)]
+            if not turned_last_step:
+                possible_steps.append((reindeer_left, 1000))
+                possible_steps.append((reindeer_right, 1000))
 
             if False:
                 debug = self.map.copy()
@@ -89,10 +91,10 @@ class Maze:
                 for s in possible_steps:
                     debug[*s.pos_ij] = s.symbol()
 
-            for next_step in possible_steps:
+            for next_step, add_cost in possible_steps:
                 if self.map[*next_step.pos_ij] != '#' and next_step not in path:
                     extended_path = path + [next_step]
-                    extended_cost = path_cost(extended_path)
+                    extended_cost = cost + add_cost
                     if extended_cost > costs_to_here[next_step]:
                         continue
                     costs_to_here[next_step] = extended_cost
