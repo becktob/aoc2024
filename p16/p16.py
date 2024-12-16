@@ -78,7 +78,7 @@ class Maze:
                     debug[*s.pos_ij] = s.symbol()
 
             for next_step in possible_steps:
-                if next_step not in path and self.map[*next_step.pos_ij] != '#':
+                if self.map[*next_step.pos_ij] != '#' and next_step not in path:
                     self.paths_in_progress.append(path + [next_step])
 
         return self.complete_paths
