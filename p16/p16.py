@@ -58,12 +58,6 @@ class Maze:
             path = self.paths_in_progress.pop()
             r = path[-1]
 
-            if any((r.pos_ij == visited.pos_ij).all() for visited in path[:-2]):  # -2 because a turn stays in same pos
-                continue
-
-            if self.map[*r.pos_ij] == '#':
-                continue
-
             if (r.pos_ij == self.end_ij).all():
                 self.complete_paths.append(path)
                 continue
@@ -84,7 +78,7 @@ class Maze:
                     debug[*s.pos_ij] = s.symbol()
 
             for next_step in possible_steps:
-                if next_step not in path:
+                if next_step not in path and self.map[*next_step.pos_ij] != '#':
                     self.paths_in_progress.append(path + [next_step])
 
         return self.complete_paths
