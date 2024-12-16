@@ -85,13 +85,6 @@ class Maze:
                 possible_steps.append((reindeer_left, 1000))
                 possible_steps.append((reindeer_right, 1000))
 
-            if False:
-                debug = self.map.copy()
-                for r in path:
-                    debug[*r.pos_ij] = 'o'
-                for s in possible_steps:
-                    debug[*s.pos_ij] = s.symbol()
-
             for next_step, add_cost in possible_steps:
                 if self.map[*next_step.pos_ij] != '#' and next_step not in path:
                     extended_path = path + [next_step]
