@@ -1,4 +1,5 @@
-from functools import cache
+import sys
+from collections import defaultdict
 
 import numpy
 
@@ -28,6 +29,9 @@ class Reindeer:
         pos = self.pos_ij.tolist() == other.pos_ij.tolist()
         return facing and pos
 
+    def __hash__(self):
+        return hash((tuple(self.pos_ij), self.facing))
+
     def right(self):  # Todo: name?
         i = Reindeer.directions_rightwise.index(self.facing)
         return Reindeer.directions_rightwise[(i + 1) % 4]
@@ -53,9 +57,10 @@ class Maze:
         starting_reindeer = Reindeer(self.start_ij, (0, 1))
 
         self.paths_in_progress = [[starting_reindeer]]
+        costs_to_here: dict[Reindeer, int] = defaultdict(lambda: sys.maxsize)
 
         while self.paths_in_progress:
-            path = self.paths_in_progress.pop()
+            path = self.paths_in_progress.pop(0)
             r = path[-1]
 
             if (r.pos_ij == self.end_ij).all():
@@ -79,7 +84,12 @@ class Maze:
 
             for next_step in possible_steps:
                 if self.map[*next_step.pos_ij] != '#' and next_step not in path:
-                    self.paths_in_progress.append(path + [next_step])
+                    extended_path = path + [next_step]
+                    cost = path_cost(extended_path)
+                    if cost > costs_to_here[next_step]:
+                        continue
+                    costs_to_here[next_step] = cost
+                    self.paths_in_progress.append(extended_path)
 
         return self.complete_paths
 

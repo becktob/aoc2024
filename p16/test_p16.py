@@ -45,7 +45,6 @@ class TestMaze(TestCase):
     def test_solve_demo_1_2(self):
         self.assertEqual(11048, solve_part_1(demo_input_16_2))
 
-    @unittest.skip('slow')
     def test_solve_part_1(self):
         with open('p16/input') as f:
-            self.assertEqual(1, solve_part_1(f.read()))
+            self.assertEqual(127520, solve_part_1(f.read()))
