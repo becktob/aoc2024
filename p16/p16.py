@@ -26,9 +26,7 @@ class Reindeer:
     def __eq__(self, other):
         if not isinstance(other, Reindeer):
             return False
-        facing = self.facing == other.facing
-        pos = self.pos_ij.tolist() == other.pos_ij.tolist()
-        return facing and pos
+        return self.facing == other.facing and self.pos_ij[0] == other.pos_ij[0] and self.pos_ij[1] == other.pos_ij[1]
 
     def __hash__(self):
         return hash((tuple(self.pos_ij), self.facing))
