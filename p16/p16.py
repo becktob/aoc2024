@@ -1,5 +1,6 @@
 import sys
 from collections import defaultdict
+from functools import cache
 
 import numpy
 
@@ -44,6 +45,7 @@ class Reindeer:
         return symbols[self.facing]
 
 
+@cache
 class Maze:
     def __init__(self, raw_input):
         self.map = string_to_array(raw_input)
@@ -53,6 +55,7 @@ class Maze:
         self.paths_in_progress = []
         self.complete_paths = []
 
+    @cache
     def solve(self):
         starting_reindeer = Reindeer(self.start_ij, (0, 1))
 
@@ -62,6 +65,9 @@ class Maze:
         while self.paths_in_progress:
             path = self.paths_in_progress.pop(0)
             r = path[-1]
+
+            if path_cost(path) > costs_to_here[r]:
+                continue
 
             if (r.pos_ij == self.end_ij).all():
                 self.complete_paths.append(path)
@@ -109,3 +115,18 @@ def solve_part_1(raw_input):
 
     costs = [path_cost(p) for p in paths]
     return min(costs)
+
+
+def solve_part_2(raw_input):
+    maze = Maze(raw_input)
+    paths = maze.solve()
+
+    costs = [path_cost(p) for p in paths]
+    lowest_cost = min(costs)
+    cheapest_paths = [p for p, c in zip(paths, costs) if c == lowest_cost]
+
+    locations = set()
+    for path in cheapest_paths:
+        locations.update(tuple(r.pos_ij) for r in path)
+
+    return len(locations)
