@@ -10,12 +10,16 @@ class Computer:
             self.program = [int(p) for p in program_line.split(':')[1].split(',')]
 
     def one_op(self):
-        operators = {2: self.bst}
+        operators = {1: self.bxl,
+                     2: self.bst}
         operator, operand = self.program[self.pointer: self.pointer + 2]
 
         operators[operator](operand)
 
         # Todo: pointer++
+
+    def bxl(self, operand):
+        self.B = operand ^ self.B
 
     def bst(self, operand):
         value = self.combo_operand(operand)

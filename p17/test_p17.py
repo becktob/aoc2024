@@ -22,3 +22,10 @@ class TestComputer(TestCase):
         c.program = [2, 6]
         c.one_op()
         self.assertEqual(1, c.B)
+
+    def test_4_adv(self):
+        c = Computer()
+        c.B = 29
+        c.program = [1, 7]
+        c.one_op()
+        self.assertEqual(26, c.B)
