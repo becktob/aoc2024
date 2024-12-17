@@ -113,11 +113,12 @@ def solve_part_2(raw_input):
     inputs_to_try = [[n] for n in range(8)]
     while promising_input := inputs_to_try.pop() if inputs_to_try else None:
         for next_input in (promising_input + [d] for d in range(8)):
-            if run_from_list(next_input, raw_input) == c.program[-len(next_input):]:
-                if len(next_input) == len(c.program):
-                    good_inputs.append(next_input)
-                else:
-                    inputs_to_try.append(next_input)
+            if run_from_list(next_input, raw_input) != c.program[-len(next_input):]:
+                continue
+            if len(next_input) == len(c.program):
+                good_inputs.append(next_input)
+            else:
+                inputs_to_try.append(next_input)
 
     return min(map(raw_input_from_list, good_inputs))
 
