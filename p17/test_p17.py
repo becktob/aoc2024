@@ -1,6 +1,6 @@
 from unittest import TestCase, skip
 
-from p17.p17 import Computer, solve_part_1, solve_part_2, simulate
+from p17.p17 import Computer, solve_part_1, solve_part_2, simulate, convert_one_byte
 
 demo_input_17 = """Register A: 729
 Register B: 0
@@ -98,3 +98,9 @@ class TestComputer(TestCase):
         self.assertEqual(0, c.A)
         self.assertEqual([3, 1], c.output)  # Todo: why?
         self.assertEqual(sim, c.output)
+
+    def test_bytewise_lookup(self):
+        program_does = {0: 4, 1: 4, 2: 6, 3: 7, 4: 0, 5: 1, 6: 2, 7: 3}
+        for i in range(8):
+            with self.subTest(i):
+                self.assertEqual(program_does[i], convert_one_byte(i))
