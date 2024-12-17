@@ -29,3 +29,11 @@ class TestComputer(TestCase):
         c.program = [1, 7]
         c.one_op()
         self.assertEqual(26, c.B)
+
+    def test_5_bxc(self):
+        c = Computer()
+        c.B = 2024
+        c.C = 43690
+        c.program = [4, 0]
+        c.one_op()
+        self.assertEqual(44354, c.B)

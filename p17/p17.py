@@ -11,7 +11,8 @@ class Computer:
 
     def one_op(self):
         operators = {1: self.bxl,
-                     2: self.bst}
+                     2: self.bst,
+                     4: self.bxc}
         operator, operand = self.program[self.pointer: self.pointer + 2]
 
         operators[operator](operand)
@@ -24,6 +25,9 @@ class Computer:
     def bst(self, operand):
         value = self.combo_operand(operand)
         self.B = value % 8
+
+    def bxc(self, _):
+        self.B = self.B ^ self.C
 
     def combo_operand(self, operand):
         if operand < 4:
