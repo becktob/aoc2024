@@ -9,6 +9,12 @@ Register C: 0
 Program: 0,1,5,4,3,0
 """
 
+demo_part_2 = """Register A: 2024
+Register B: 0
+Register C: 0
+
+Program: 0,3,5,4,3,0"""
+
 
 class TestComputer(TestCase):
     def test_parse(self):
@@ -59,3 +65,9 @@ class TestComputer(TestCase):
     def test_solve_1(self):
         with open('p17/input') as f:
             self.assertEqual('4,1,5,3,1,5,3,5,7', solve_part_1(f.read()))
+
+    def test_program_outputs_self(self):
+        c = Computer(demo_part_2)
+        c.A = 117440
+        c.run()
+        self.assertEqual(c.output, c.program)
