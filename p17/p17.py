@@ -61,3 +61,9 @@ class Computer:
             return self.C
         elif operand == 7:
             raise ValueError("Combo operand 7 is reserved and will not appear in valid programs.")
+
+
+def solve_part_1(raw_input):
+    c = Computer(raw_input)
+    c.run()
+    return ','.join(map(str, c.output))

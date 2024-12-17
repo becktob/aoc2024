@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from p17.p17 import Computer
+from p17.p17 import Computer, solve_part_1
 
 demo_input_17 = """Register A: 729
 Register B: 0
@@ -52,3 +52,6 @@ class TestComputer(TestCase):
         c.program = [4, 0]
         c.one_op()
         self.assertEqual(44354, c.B)
+
+    def test_demo(self):
+        self.assertEqual("4,6,3,5,6,3,5,2,1,0", solve_part_1(demo_input_17))
