@@ -111,11 +111,8 @@ def solve_part_2(raw_input):
 
     good_inputs = []
     inputs_to_try = [[n] for n in range(8)]
-    while inputs_to_try:
-        promising_input = inputs_to_try.pop()  # optimistic variable names ;)
-        for next_digit in range(8):
-            next_input = promising_input + [next_digit]
-
+    while promising_input := inputs_to_try.pop() if inputs_to_try else None:
+        for next_input in (promising_input + [d] for d in range(8)):
             if run_from_list(next_input, raw_input) == c.program[-len(next_input):]:
                 if len(next_input) == len(c.program):
                     good_inputs.append(next_input)
