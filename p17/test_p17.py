@@ -53,5 +53,9 @@ class TestComputer(TestCase):
         c.one_op()
         self.assertEqual(44354, c.B)
 
-    def test_demo(self):
+    def test_demo_1(self):
         self.assertEqual("4,6,3,5,6,3,5,2,1,0", solve_part_1(demo_input_17))
+
+    def test_solve_1(self):
+        with open('p17/input') as f:
+            self.assertEqual('4,1,5,3,1,5,3,5,7', solve_part_1(f.read()))

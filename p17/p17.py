@@ -22,7 +22,9 @@ class Computer:
                      2: self.bst,
                      3: self.jnz,
                      4: self.bxc,
-                     5: self.out}
+                     5: self.out,
+                     6: self.bdv,
+                     7: self.cdv,}
         operator, operand = self.program[self.pointer: self.pointer + 2]
 
         operators[operator](operand)
@@ -49,6 +51,14 @@ class Computer:
 
     def out(self, operand):
         self.output.append(self.combo_operand(operand) % 8)
+
+    def bdv(self, operand):
+        denominator = 2 ** self.combo_operand(operand)
+        self.B = self.A // denominator
+
+    def cdv(self, operand):
+        denominator = 2 ** self.combo_operand(operand)
+        self.C = self.A // denominator
 
     def combo_operand(self, operand):
         if operand < 4:
