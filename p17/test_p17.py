@@ -15,3 +15,10 @@ class TestComputer(TestCase):
         c = Computer(demo_input_17)
         self.assertEqual(729, c.A)
         self.assertEqual(6, len(c.program))
+
+    def test_1_bst(self):
+        c = Computer()
+        c.C = 9
+        c.program = [2, 6]
+        c.one_op()
+        self.assertEqual(1, c.B)
