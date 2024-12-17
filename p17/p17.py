@@ -91,7 +91,7 @@ def solve_part_2(raw_input):
             return i
 
 
-def simulate(A):
+def simulate_literal(A):
     # translate input program:
     while A != 0:  # jnz at end of program
         B = A % 8
@@ -101,3 +101,18 @@ def simulate(A):
         A = A // 8
         B = B ^ C
         yield B % 8  # out
+
+
+def convert_one_byte(A_byte):
+    B = A_byte
+    B = B ^ 1
+    C = A_byte // 2 ** B
+    B = B ^ 5
+    B = B ^ C
+    return B % 8
+
+
+def simulate(A):
+    while A != 0:
+        yield convert_one_byte(A % 8)
+        A = A // 8
