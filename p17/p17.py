@@ -1,3 +1,6 @@
+import itertools
+
+
 class Computer:
     def __init__(self, raw_input: str | None = None):
         self.A, self.B, self.C = 0, 0, 0
@@ -77,3 +80,12 @@ def solve_part_1(raw_input):
     c = Computer(raw_input)
     c.run()
     return ','.join(map(str, c.output))
+
+
+def solve_part_2(raw_input):
+    for i in itertools.count():
+        c = Computer(raw_input)
+        c.A = i
+        c.run()
+        if c.output == c.program:
+            return i
