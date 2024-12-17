@@ -23,6 +23,13 @@ class TestComputer(TestCase):
         c.one_op()
         self.assertEqual(1, c.B)
 
+    def test_2_out(self):
+        c = Computer()
+        c.A = 10
+        c.program = [5, 0, 5, 1, 5, 4]
+        c.run()
+        self.assertListEqual([0, 1, 2], c.output)
+
     def test_4_adv(self):
         c = Computer()
         c.B = 29

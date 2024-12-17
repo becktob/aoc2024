@@ -4,20 +4,26 @@ class Computer:
         self.program: list[int] = []
         self.pointer = 0
 
+        self.output = []
+
         if raw_input is not None:
             register_lines, program_line = raw_input.split('\n\n')
             self.A, self.B, self.C = map(int, (l.split(':')[1] for l in register_lines.splitlines()))
             self.program = [int(p) for p in program_line.split(':')[1].split(',')]
 
+    def run(self):
+        while self.pointer < len(self.program):
+            self.one_op()
+            self.pointer += 2
+
     def one_op(self):
         operators = {1: self.bxl,
                      2: self.bst,
-                     4: self.bxc}
+                     4: self.bxc,
+                     5: self.out}
         operator, operand = self.program[self.pointer: self.pointer + 2]
 
         operators[operator](operand)
-
-        # Todo: pointer++
 
     def bxl(self, operand):
         self.B = operand ^ self.B
@@ -28,6 +34,9 @@ class Computer:
 
     def bxc(self, _):
         self.B = self.B ^ self.C
+
+    def out(self, operand):
+        self.output.append(self.combo_operand(operand) % 8)
 
     def combo_operand(self, operand):
         if operand < 4:
