@@ -79,15 +79,6 @@ def solve_part_1(raw_input):
     return ','.join(map(str, c.output))
 
 
-def solve_part_2(raw_input):
-    for i in itertools.count():
-        c = Computer(raw_input)
-        c.A = i
-        c.run()
-        if c.output == c.program:
-            return i
-
-
 def simulate_literal(A):
     # translate input program:
     while A != 0:  # jnz at end of program
@@ -108,6 +99,7 @@ def convert_one_byte(A):
     B = B ^ C
     return B % 8
 
+
 def simulate(A):
     while A != 0:
         yield convert_one_byte(A)
@@ -124,10 +116,7 @@ def solve_part_2(raw_input):
         for next_digit in range(8):
             next_input = promising_input + [next_digit]
 
-            out = run_from_list(next_input, raw_input)
-
-            target_this_length = c.program[-len(next_input):]
-            if out == target_this_length:
+            if run_from_list(next_input, raw_input) == c.program[-len(next_input):]:
                 if len(next_input) == len(c.program):
                     good_inputs.append(next_input)
                 else:
