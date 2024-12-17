@@ -115,3 +115,30 @@ def simulate(A):
     while A != 0:
         yield convert_one_byte(A)
         A = A // 8
+
+
+def simulate_2(raw_input):
+    c = Computer(raw_input)
+    print(f"trying to output {c.program}")
+
+    known_input = []
+    for _ in range(len(c.program)):
+        for next_digit in range(8):
+            next_input = known_input + [next_digit]
+            next_raw = sum(d*8**n for n,d in enumerate(reversed(next_input)))
+
+            c.A = next_raw
+            c.pointer = 0
+            c.output = []
+            c.run()
+
+            out = c.output
+
+            target_this_length = c.program[-len(next_input):]
+            print(f"{next_input} => {next_raw} => {out} | {target_this_length}")
+            if out == target_this_length:
+                print(next_input)
+                known_input = next_input
+                break
+
+    return known_input

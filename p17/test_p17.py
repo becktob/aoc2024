@@ -1,6 +1,7 @@
 from unittest import TestCase, skip
 
-from p17.p17 import Computer, solve_part_1, solve_part_2, simulate, simulate_literal
+from p17.p17 import Computer, solve_part_1, solve_part_2, simulate, simulate_literal, \
+    simulate_2
 
 demo_input_17 = """Register A: 729
 Register B: 0
@@ -92,11 +93,21 @@ class TestComputer(TestCase):
 
     def test_solve_2_two_cycles(self):
         c = Computer(full_part_2)
-        c.A = 5 * 8 + 7
+        c.A = 5 * 8 * 8 + 7 * 8 + 1
         sim = list(simulate(c.A))
         c.run()
         self.assertEqual(0, c.A)
-        self.assertEqual([3, 1], c.output)  # Todo: why?
+        self.assertEqual([4, 3, 1], c.output)  # Todo: why?
+        self.assertEqual(sim, c.output)
+
+    def test_solve_2_three_cycles(self):
+        # output first position is determined by input lsb
+        c = Computer(full_part_2)
+        c.A = 5 * 8 * 8 * 8 + 7 *8 *8  + 1 * 8 + 3
+        sim = list(simulate(c.A))
+        c.run()
+        self.assertEqual(0, c.A)
+        self.assertEqual([5, 4, 3, 1], c.output)  # Todo: why?
         self.assertEqual(sim, c.output)
 
     def test_simulate_refactoring(self):
@@ -104,3 +115,6 @@ class TestComputer(TestCase):
         literal = list(simulate_literal(A))
         refactored = list(simulate(A))
         self.assertEqual(literal, refactored)
+
+    def test_solve_2_sim(self):
+        self.assertEqual(1, simulate_2(full_part_2))
