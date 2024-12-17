@@ -17,16 +17,28 @@ class Computer:
             self.pointer += 2
 
     def one_op(self):
-        operators = {1: self.bxl,
+        operators = {0: self.adv,
+                     1: self.bxl,
                      2: self.bst,
+                     3: self.jnz,
                      4: self.bxc,
                      5: self.out}
         operator, operand = self.program[self.pointer: self.pointer + 2]
 
         operators[operator](operand)
 
+    def adv(self, operand):
+        denominator = 2 ** self.combo_operand(operand)
+        self.A = self.A // denominator
+
     def bxl(self, operand):
         self.B = operand ^ self.B
+
+    def jnz(self, operand):
+        if self.A == 0:
+            return
+        else:
+            self.pointer = operand - 2  # pointer is +=2 in run()
 
     def bst(self, operand):
         value = self.combo_operand(operand)

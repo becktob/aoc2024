@@ -30,6 +30,14 @@ class TestComputer(TestCase):
         c.run()
         self.assertListEqual([0, 1, 2], c.output)
 
+    def test_3_adv_jnz(self):
+        c = Computer()
+        c.A = 2024
+        c.program = [0, 1, 5, 4, 3, 0]
+        c.run()
+        self.assertListEqual([4, 2, 5, 6, 7, 7, 7, 7, 3, 1, 0], c.output)
+        self.assertEqual(0, c.A)
+
     def test_4_adv(self):
         c = Computer()
         c.B = 29
