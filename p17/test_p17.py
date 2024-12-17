@@ -1,7 +1,6 @@
-from unittest import TestCase, skip
+from unittest import TestCase
 
-from p17.p17 import Computer, solve_part_1, solve_part_2, simulate, simulate_literal, \
-    simulate_2
+from p17.p17 import Computer, solve_part_1, simulate, simulate_literal, solve_part_2
 
 demo_input_17 = """Register A: 729
 Register B: 0
@@ -76,13 +75,8 @@ class TestComputer(TestCase):
         c.run()
         self.assertEqual(c.output, c.program)
 
-    @skip('slow')
     def test_demo_2(self):
         self.assertEqual(117440, solve_part_2(demo_part_2))
-
-    @skip('slow')
-    def test_solve_2(self):
-        self.assertEqual(1, solve_part_2(full_part_2))
 
     def test_solve_2_one_cycle(self):
         c = Computer(full_part_2)
@@ -103,7 +97,7 @@ class TestComputer(TestCase):
     def test_solve_2_three_cycles(self):
         # output first position is determined by input lsb
         c = Computer(full_part_2)
-        c.A = 5 * 8 * 8 * 8 + 7 *8 *8  + 1 * 8 + 3
+        c.A = 5 * 8 * 8 * 8 + 7 * 8 * 8 + 1 * 8 + 3
         sim = list(simulate(c.A))
         c.run()
         self.assertEqual(0, c.A)
@@ -116,5 +110,5 @@ class TestComputer(TestCase):
         refactored = list(simulate(A))
         self.assertEqual(literal, refactored)
 
-    def test_solve_2_sim(self):
-        self.assertEqual(1, simulate_2(full_part_2))
+    def test_solve_part_2(self):
+        self.assertEqual(164542125272765, solve_part_2(full_part_2))

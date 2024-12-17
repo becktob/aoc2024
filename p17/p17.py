@@ -1,6 +1,3 @@
-import itertools
-
-
 class Computer:
     def __init__(self, raw_input: str | None = None):
         self.A, self.B, self.C = 0, 0, 0
@@ -117,28 +114,35 @@ def simulate(A):
         A = A // 8
 
 
-def simulate_2(raw_input):
+def solve_part_2(raw_input):
     c = Computer(raw_input)
-    print(f"trying to output {c.program}")
 
-    known_input = []
-    for _ in range(len(c.program)):
+    good_inputs = []
+    inputs_to_try = [[n] for n in range(8)]
+    while inputs_to_try:
+        promising_input = inputs_to_try.pop()  # optimistic variable names ;)
         for next_digit in range(8):
-            next_input = known_input + [next_digit]
-            next_raw = sum(d*8**n for n,d in enumerate(reversed(next_input)))
+            next_input = promising_input + [next_digit]
 
-            c.A = next_raw
-            c.pointer = 0
-            c.output = []
-            c.run()
-
-            out = c.output
+            out = run_from_list(next_input, raw_input)
 
             target_this_length = c.program[-len(next_input):]
-            print(f"{next_input} => {next_raw} => {out} | {target_this_length}")
             if out == target_this_length:
-                print(next_input)
-                known_input = next_input
-                break
+                if len(next_input) == len(c.program):
+                    good_inputs.append(next_input)
+                else:
+                    inputs_to_try.append(next_input)
 
-    return known_input
+    return min(map(raw_input_from_list, good_inputs))
+
+
+def run_from_list(next_input, raw_input):
+    next_raw = raw_input_from_list(next_input)
+    c = Computer(raw_input)
+    c.A = next_raw
+    c.run()
+    return c.output
+
+
+def raw_input_from_list(next_input):
+    return sum(d * 8 ** n for n, d in enumerate(reversed(next_input)))
