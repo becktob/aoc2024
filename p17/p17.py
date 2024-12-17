@@ -27,7 +27,7 @@ class Computer:
                      4: self.bxc,
                      5: self.out,
                      6: self.bdv,
-                     7: self.cdv,}
+                     7: self.cdv}
         operator, operand = self.program[self.pointer: self.pointer + 2]
 
         operators[operator](operand)
@@ -89,3 +89,15 @@ def solve_part_2(raw_input):
         c.run()
         if c.output == c.program:
             return i
+
+
+def simulate(A):
+    # translate input program:
+    while A != 0:  # jnz at end of program
+        B = A % 8
+        B = B ^ 1
+        C = A // 2 ** B
+        B = B ^ 5
+        A = A // 8
+        B = B ^ C
+        yield B % 8  # out

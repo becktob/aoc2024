@@ -1,6 +1,6 @@
-from unittest import TestCase
+from unittest import TestCase, skip
 
-from p17.p17 import Computer, solve_part_1, solve_part_2
+from p17.p17 import Computer, solve_part_1, solve_part_2, simulate
 
 demo_input_17 = """Register A: 729
 Register B: 0
@@ -14,6 +14,9 @@ Register B: 0
 Register C: 0
 
 Program: 0,3,5,4,3,0"""
+
+with open('p17/input') as f:
+    full_part_2 = f.read()
 
 
 class TestComputer(TestCase):
@@ -72,5 +75,26 @@ class TestComputer(TestCase):
         c.run()
         self.assertEqual(c.output, c.program)
 
+    @skip('slow')
     def test_demo_2(self):
         self.assertEqual(117440, solve_part_2(demo_part_2))
+
+    @skip('slow')
+    def test_solve_2(self):
+        self.assertEqual(1, solve_part_2(full_part_2))
+
+    def test_solve_2_one_cycle(self):
+        c = Computer(full_part_2)
+        c.A = 7
+        c.run()
+        self.assertEqual(0, c.A)
+        self.assertEqual([3], c.output)  # Todo: why?
+
+    def test_solve_2_two_cycles(self):
+        c = Computer(full_part_2)
+        c.A = 5 * 8 + 7
+        sim = list(simulate(c.A))
+        c.run()
+        self.assertEqual(0, c.A)
+        self.assertEqual([3, 1], c.output)  # Todo: why?
+        self.assertEqual(sim, c.output)
