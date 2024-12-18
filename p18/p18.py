@@ -11,14 +11,12 @@ class Ram:
             self.size = max(xy for c in self.corrupted for xy in c)
 
     def flood_from_exit(self):
-        exit = (self.size, self.size)
         steps_to_exit = defaultdict(lambda: sys.maxsize)
-        steps_to_exit[exit] = 0
+        steps_to_exit[exit := (self.size, self.size)] = 0
         xy_in_progress = [exit]
 
         while xy := xy_in_progress.pop(0) if xy_in_progress else None is not None:
             steps_to_here = steps_to_exit[xy]
-            steps_to_next = steps_to_here + 1
 
             for d in ((1, 0), (-1, 0), (0, 1), (0, -1)):
                 xy_next = tuple(c + d for c, d in zip(xy, d))
@@ -27,7 +25,7 @@ class Ram:
                 if xy in self.corrupted:
                     continue
 
-                if steps_to_next < steps_to_exit[xy_next]:
+                if (steps_to_next := steps_to_here + 1) < steps_to_exit[xy_next]:
                     steps_to_exit[xy_next] = steps_to_next
                     xy_in_progress.append(xy_next)
 
