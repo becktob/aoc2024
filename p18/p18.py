@@ -3,10 +3,12 @@ from collections import defaultdict
 
 
 class Ram:
-    def __init__(self, raw_input: str, num_bytes: int):
+    def __init__(self, raw_input: str, num_bytes: int, size: int = None):
         self.corrupted = [tuple(int(xy) for xy in l.split(',')) for l in raw_input.splitlines()]
         self.corrupted = self.corrupted[:num_bytes]
-        self.size = max(xy for c in self.corrupted for xy in c)
+        self.size = size
+        if size is None:
+            self.size = max(xy for c in self.corrupted for xy in c)
 
     def flood_from_exit(self):
         exit = (self.size, self.size)
@@ -35,3 +37,15 @@ class Ram:
 def solve_part_1(raw_input, num_bytes):
     ram = Ram(raw_input, num_bytes)
     return ram.flood_from_exit()
+
+
+def solve_part_2(raw_input):
+    lines = raw_input.splitlines()
+    corrupted = [tuple(int(xy) for xy in l.split(',')) for l in raw_input.splitlines()]
+    size = max(xy for c in corrupted for xy in c)
+
+    for num_bytes in range(len(lines)):
+        ram = Ram(raw_input, num_bytes, size)
+        steps = ram.flood_from_exit()
+        if steps == sys.maxsize:
+            return lines[num_bytes - 1]

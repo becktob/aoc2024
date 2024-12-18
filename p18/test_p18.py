@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from p18.p18 import Ram, solve_part_1
+from p18.p18 import Ram, solve_part_1, solve_part_2
 
 demo_input_18 = """5,4
 4,2
@@ -40,3 +40,6 @@ class TestRam(TestCase):
     def test_solve_part_1(self):
         with open('p18/input') as f:
             self.assertEqual(336, solve_part_1(f.read(), 1024))
+
+    def test_solve_demo_2(self):
+        self.assertEqual("6,1", solve_part_2(demo_input_18))
