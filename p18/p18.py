@@ -44,18 +44,12 @@ def solve_part_2(raw_input):
     corrupted = [tuple(int(xy) for xy in l.split(',')) for l in raw_input.splitlines()]
     size = max(xy for c in corrupted for xy in c)
 
-    num_over = len(lines)
-    num_under = 0
+    num_under, num_over = 0, len(lines)
 
-    while num_under + 1 != num_over:
-        num_bytes = (num_under + num_over) // 2
-
-        ram = Ram(raw_input, num_bytes, size)
-        steps = ram.flood_from_exit()
-
-        if steps == sys.maxsize:
-            num_over = num_bytes
+    while num_under < (num_middle := (num_under + num_over) // 2) < num_over:
+        if Ram(raw_input, num_middle, size).flood_from_exit() == sys.maxsize:
+            num_over = num_middle
         else:
-            num_under = num_bytes
+            num_under = num_middle
 
     return lines[num_under]
