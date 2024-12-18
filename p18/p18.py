@@ -31,6 +31,7 @@ class Ram:
 
         return steps_to_exit[(0, 0)]
 
+
 def solve_part_1(raw_input, num_bytes):
-    ram = Ram(raw_input, 12)
+    ram = Ram(raw_input, num_bytes)
     return ram.flood_from_exit()

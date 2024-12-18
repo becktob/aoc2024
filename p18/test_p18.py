@@ -36,3 +36,7 @@ class TestRam(TestCase):
 
     def test_solve_demo_1(self):
         self.assertEqual(22, solve_part_1(demo_input_18, 12))
+
+    def test_solve_part_1(self):
+        with open('p18/input') as f:
+            self.assertEqual(336, solve_part_1(f.read(), 1024))
