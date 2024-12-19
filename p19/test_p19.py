@@ -44,3 +44,8 @@ class Test(TestCase):
 
     def test_solve_demo_2(self):
         self.assertEqual(16, solve_part_2(demo_input_19))
+
+    def test_solve_part2(self):
+        with open('p19/input') as f:
+            self.assertEqual(632423618484345, solve_part_2(f.read()))
+        print(count_combine.cache_info())

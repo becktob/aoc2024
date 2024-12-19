@@ -1,11 +1,14 @@
-def parse_towels_designs(raw_input: str) -> (list[str], list[str]):
+from functools import cache
+
+
+def parse_towels_designs(raw_input: str) -> (tuple[str], tuple[str]):
     raw_towels, raw_designs = raw_input.split('\n\n')
-    towels = raw_towels.split(', ')
-    designs = raw_designs.splitlines()
+    towels = tuple(raw_towels.split(', '))
+    designs = tuple(raw_designs.splitlines())
     return towels, designs
 
 
-def find_combinations(design: str, towels: list[str]) -> list[list[str]]:
+def find_combinations(design: str, towels: tuple[str]) -> list[list[str]]:
     towels_matching_beginning = [t for t in towels if all(d == t for d, t in zip(design, t))]
 
     combinations = []
@@ -19,7 +22,7 @@ def find_combinations(design: str, towels: list[str]) -> list[list[str]]:
     return combinations
 
 
-def can_combine(design: str, towels: list[str]) -> bool:
+def can_combine(design: str, towels: tuple[str]) -> bool:
     towels_matching_beginning = [t for t in towels if all(d == t for d, t in zip(design, t))]
 
     for beginning in towels_matching_beginning:
@@ -31,8 +34,8 @@ def can_combine(design: str, towels: list[str]) -> bool:
 
     return False
 
-
-def count_combine(design: str, towels: list[str]) -> int:
+@cache
+def count_combine(design: str, towels: tuple[str]) -> int:
     towels_matching_beginning = [t for t in towels if all(d == t for d, t in zip(design, t))]
 
     combinations = 0
