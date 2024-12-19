@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from p19.p19 import parse_towels_designs, find_combinations
+from p19.p19 import parse_towels_designs, find_combinations, solve_part_1
 
 demo_input_19 = """r, wr, b, g, bwu, rb, gb, br
 
@@ -28,3 +28,6 @@ class Test(TestCase):
     def test_impossible_to_find_combination(self):
         towels, designs = parse_towels_designs(demo_input_19)
         self.assertEqual([], find_combinations('ubwu', towels))
+
+    def test_solve_demo_1(self):
+        self.assertEqual(6, solve_part_1(demo_input_19))
