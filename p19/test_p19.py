@@ -24,3 +24,7 @@ class Test(TestCase):
     def test_find_combination(self):
         towels, designs = parse_towels_designs(demo_input_19)
         self.assertIn(['br', 'wr', 'r'], find_combinations('brwrr', towels))
+
+    def test_impossible_to_find_combination(self):
+        towels, designs = parse_towels_designs(demo_input_19)
+        self.assertEqual([], find_combinations('ubwu', towels))
