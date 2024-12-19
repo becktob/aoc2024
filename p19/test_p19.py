@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from p19.p19 import parse_towels_designs, find_combinations, solve_part_1, can_combine
+from p19.p19 import parse_towels_designs, find_combinations, solve_part_1, can_combine, solve_part_2, count_combine
 
 demo_input_19 = """r, wr, b, g, bwu, rb, gb, br
 
@@ -41,3 +41,6 @@ class Test(TestCase):
     def test_solve_part1(self):
         with open('p19/input') as f:
             self.assertEqual(258, solve_part_1(f.read()))
+
+    def test_solve_demo_2(self):
+        self.assertEqual(16, solve_part_2(demo_input_19))

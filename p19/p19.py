@@ -32,6 +32,24 @@ def can_combine(design: str, towels: list[str]) -> bool:
     return False
 
 
+def count_combine(design: str, towels: list[str]) -> int:
+    towels_matching_beginning = [t for t in towels if all(d == t for d, t in zip(design, t))]
+
+    combinations = 0
+    for beginning in towels_matching_beginning:
+        if beginning == design:
+            combinations += 1
+        elif remaining := design[len(beginning):]:
+            combinations += count_combine(remaining, towels)
+
+    return combinations
+
+
 def solve_part_1(raw_input: str):
     towels, designs = parse_towels_designs(raw_input)
     return sum(1 for d in designs if can_combine(d, towels))
+
+
+def solve_part_2(raw_input: str):
+    towels, designs = parse_towels_designs(raw_input)
+    return sum(count_combine(d, towels) for d in designs)
