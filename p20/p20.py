@@ -25,3 +25,15 @@ class Racetrack:
                 break
 
         return path
+
+    def find_cheats(self, min_save):
+        path = self.find_path()
+
+        cheats = []
+        for t_start, cheat_start in enumerate(path):
+            for t_end, cheat_end in enumerate(path):
+                if sum(abs(cheat_end - cheat_start)) == 2:
+                    time_saved = t_end - t_start - 2
+                    cheats.append(((cheat_start, cheat_end), time_saved))
+
+        return [c for c in cheats if c[1] >= min_save]
