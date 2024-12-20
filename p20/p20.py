@@ -31,11 +31,11 @@ class Racetrack:
     def find_cheats(self, min_save, max_cheat=2):
         path = self.find_path()
 
-        steps_from_start = {n: pos for n, pos in enumerate(path)}
+        steps_from_start = {n: (pos[0], pos[1]) for n, pos in enumerate(path)}
 
         cheats = []
         for (start_step, cheat_start), (end_step, cheat_end) in combinations(steps_from_start.items(), 2):
-            cheat_length = sum(abs(cheat_end - cheat_start))
+            cheat_length = abs(cheat_end[0] - cheat_start[0]) + abs(cheat_end[1] - cheat_start[1])
             time_saved = end_step - start_step - cheat_length
             if cheat_length <= max_cheat and time_saved >= min_save:
                 cheats.append(((cheat_start, cheat_end), time_saved))
