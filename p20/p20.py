@@ -31,9 +31,16 @@ class Racetrack:
 
         cheats = []
         for t_start, cheat_start in enumerate(path):
-            for t_end, cheat_end in enumerate(path):
+            if t_start % 100 == 0:
+                print(f"{t_start}/{len(path)}")
+            for t_skip, cheat_end in enumerate(path[t_start + min_save + 2:]):
                 if sum(abs(cheat_end - cheat_start)) == 2:
-                    time_saved = t_end - t_start - 2
+                    time_saved = t_skip + min_save
                     cheats.append(((cheat_start, cheat_end), time_saved))
 
-        return [c for c in cheats if c[1] >= min_save]
+        return cheats
+
+
+def solve_part_1(raw_input):
+    racetrack = Racetrack(raw_input)
+    return len(racetrack.find_cheats(100))
