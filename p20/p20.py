@@ -1,3 +1,5 @@
+from itertools import combinations
+
 import numpy
 
 from helpers import string_to_array
@@ -26,17 +28,17 @@ class Racetrack:
 
         return path
 
-    def find_cheats(self, min_save):
+    def find_cheats(self, min_save, max_cheat=2):
         path = self.find_path()
 
+        steps_from_start = {n: pos for n, pos in enumerate(path)}
+
         cheats = []
-        for t_start, cheat_start in enumerate(path):
-            if t_start % 100 == 0:
-                print(f"{t_start}/{len(path)}")
-            for t_skip, cheat_end in enumerate(path[t_start + min_save + 2:]):
-                if sum(abs(cheat_end - cheat_start)) == 2:
-                    time_saved = t_skip + min_save
-                    cheats.append(((cheat_start, cheat_end), time_saved))
+        for (start_step, cheat_start), (end_step, cheat_end) in combinations(steps_from_start.items(), 2):
+            cheat_length = sum(abs(cheat_end - cheat_start))
+            time_saved = end_step - start_step - cheat_length
+            if cheat_length <= max_cheat and time_saved >= min_save:
+                cheats.append(((cheat_start, cheat_end), time_saved))
 
         return cheats
 
