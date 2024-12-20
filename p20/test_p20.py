@@ -1,7 +1,7 @@
 import unittest
 from unittest import TestCase
 
-from p20.p20 import Racetrack, solve_part_1
+from p20.p20 import Racetrack, solve_part_1, solve_part_2
 
 demo_input_20 = """###############
 #...#...#.....#
@@ -47,3 +47,7 @@ class TestRacetrack(TestCase):
     def test_solve_part_1(self):
         with open('p20/input') as f:
             self.assertEqual(1387, solve_part_1(f.read()))
+
+    def test_solve_part_2(self):
+        with open('p20/input') as f:
+            self.assertEqual(1015092, solve_part_2(f.read()))

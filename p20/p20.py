@@ -46,3 +46,8 @@ class Racetrack:
 def solve_part_1(raw_input):
     racetrack = Racetrack(raw_input)
     return len(racetrack.find_cheats(100))
+
+
+def solve_part_2(raw_input):
+    racetrack = Racetrack(raw_input)
+    return len(racetrack.find_cheats(100, max_cheat=20))
