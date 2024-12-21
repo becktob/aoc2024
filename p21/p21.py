@@ -23,7 +23,7 @@ def shortest_key_sequences(sequence_to_push: str,
     d_col = j_to - j_from
     col_char = ('>' if d_col > 0 else '<')
     d_row = i_to - i_from
-    row_char = ('v' if d_col > 0 else '^')
+    row_char = ('v' if d_row > 0 else '^')
 
     total_keys = abs(d_col) + abs(d_row)
     indices_row = combinations(range(total_keys), abs(d_row))

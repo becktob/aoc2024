@@ -16,3 +16,8 @@ class Test(TestCase):
         self.assertIn('<^^A', sequences_1left_2up)
         self.assertIn('^<^A', sequences_1left_2up)
         self.assertIn('^^<A', sequences_1left_2up)
+
+    def test_029A_keypad(self):
+        sequences = shortest_key_sequences('029A')
+        self.assertEqual(3, len(sequences))
+        self.assertIn('<A^A^>^AvvvA', sequences)
