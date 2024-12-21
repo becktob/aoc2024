@@ -101,10 +101,10 @@ def count_shortest_button_to_button(b_from, b_to, keypads: tuple) -> int:
         seq_from_A = 'A' + seq
         combinations_this_sequence = [shortest_button_to_button(f, t, keypads[1:]) for f, t in
                                       zip(seq_from_A[:-1], seq_from_A[1:])]
-        combinations_this_sequence = ["".join(segments) for segments in product(*combinations_this_sequence)]
-        button_to_button += combinations_this_sequence
+        lengths_this_sequence = [sum(map(len,segments)) for segments in product(*combinations_this_sequence)]
+        button_to_button += lengths_this_sequence
 
-    return min(map(len, button_to_button))
+    return min(button_to_button)
 
 
 def score_code(code: str):
