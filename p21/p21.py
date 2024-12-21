@@ -44,3 +44,12 @@ def shortest_key_sequences(sequence_to_push: str,
 
     sequences_tail = shortest_key_sequences(sequence_to_push[1:], keypad_layout, sequence_to_push[0])
     return [head + tail for head, tail in product(sequences_head, sequences_tail)]
+
+
+def sequential_sequence(sequence_to_push: str, keypads: Iterable[Keypad]):
+    sequences = [sequence_to_push]
+
+    for keypad in keypads:
+        sequences = [s for inner in sequences for s in shortest_key_sequences(inner, keypad)]
+
+    return sequences
