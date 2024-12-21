@@ -1,4 +1,4 @@
-from unittest import TestCase, skip
+from unittest import TestCase
 
 from p21.p21 import shortest_key_sequences, directional_keypad, numeric_keypad, sequential_sequence, score_code, \
     solve_part_1, shortest_button_to_button

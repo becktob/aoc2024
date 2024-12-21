@@ -6,9 +6,13 @@ from typing import Iterable
 class Keypad:
     def __init__(self, rows: Iterable[str]):
         self.char_positions: dict[str, tuple[int, int]] = dict()
+        self.gap: tuple[int, int]
         for i, row in enumerate(rows):
             for j, char in enumerate(row):
-                self.char_positions[char] = (i, j) if char != '-' else None
+                if char == '-':
+                    self.gap = (i, j)
+                else:
+                    self.char_positions[char] = (i, j)
 
     def __getitem__(self, char: str):
         return self.char_positions[char]
@@ -35,11 +39,11 @@ def shortest_key_sequences(sequence_to_push: str,
     col_char = ('>' if d_col > 0 else '<')
     d_row = i_to - i_from
     row_char = ('v' if d_row > 0 else '^')
+    col_chars = abs(d_col) * col_char
+    row_chars = abs(d_row) * row_char
 
     sequences_head = set()
     if simple_only:
-        col_chars = abs(d_col) * col_char
-        row_chars = abs(d_row) * row_char
         sequences_head.add(row_chars + col_chars + 'A')
         sequences_head.add(col_chars + row_chars + 'A')
     else:
@@ -49,6 +53,11 @@ def shortest_key_sequences(sequence_to_push: str,
         for indices in indices_row:
             key_combination = "".join([row_char if i in indices else col_char for i in range(total_keys)]) + 'A'
             sequences_head.add(key_combination)
+
+    if keypad_layout.gap == (i_from, j_to):
+        sequences_head.remove(col_chars + row_chars + 'A')
+    if keypad_layout.gap == (i_to, j_from):
+        sequences_head.remove(row_chars + col_chars + 'A')
 
     sequences_tail = shortest_key_sequences(sequence_to_push[1:], keypad_layout, sequence_to_push[0])
     return [head + tail for head, tail in product(sequences_head, sequences_tail)]
