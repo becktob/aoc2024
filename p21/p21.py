@@ -21,7 +21,7 @@ class Keypad:
 numeric_keypad = Keypad(('789', '456', '123', '-0A'))
 directional_keypad = Keypad(('-^A', '<v>'))
 
-
+@cache
 def shortest_key_sequences(sequence_to_push: str,
                            keypad_layout: Keypad = None,
                            start_char='A',
@@ -90,6 +90,22 @@ def shortest_button_to_button(b_from, b_to, keypads: tuple) -> list[str]:
 
     return button_to_button
 
+@cache
+def count_shortest_button_to_button(b_from, b_to, keypads: tuple) -> int:
+    sequences_this_keypad = shortest_key_sequences(b_to, keypads[0], b_from, simple_only=True)
+    if len(keypads) == 1:
+        return len(sequences_this_keypad)
+
+    button_to_button = []
+    for seq in sequences_this_keypad:
+        seq_from_A = 'A' + seq
+        combinations_this_sequence = [shortest_button_to_button(f, t, keypads[1:]) for f, t in
+                                      zip(seq_from_A[:-1], seq_from_A[1:])]
+        combinations_this_sequence = ["".join(segments) for segments in product(*combinations_this_sequence)]
+        button_to_button += combinations_this_sequence
+
+    return min(map(len, button_to_button))
+
 
 def score_code(code: str):
     keypads = numeric_keypad, directional_keypad, directional_keypad
@@ -101,5 +117,19 @@ def score_code(code: str):
     return int(code.replace('A', '')) * shortest_len
 
 
+def score_code_count_only(code: str, keypads = None):
+    if keypads is None:
+        keypads = numeric_keypad, directional_keypad, directional_keypad
+
+    return int(code.replace('A', '')) * count_shortest_button_to_button('A', code, keypads)
+
+
 def solve_part_1(raw_input: str):
     return sum(map(score_code, raw_input.splitlines()))
+
+
+def solve_part_2(raw_input: str):
+    keypads = [numeric_keypad] + [directional_keypad]*25
+    keypads = tuple(keypads)
+    return sum(map(lambda code: score_code_count_only(code, keypads), raw_input.splitlines()))
+
