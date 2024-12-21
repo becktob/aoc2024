@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from p21.p21 import shortest_key_sequences
+from p21.p21 import shortest_key_sequences, directional_keypad
 
 
 class Test(TestCase):
@@ -21,3 +21,7 @@ class Test(TestCase):
         sequences = shortest_key_sequences('029A')
         self.assertEqual(3, len(sequences))
         self.assertIn('<A^A^>^AvvvA', sequences)
+
+    def test_directional_keypad(self):
+        sequences = shortest_key_sequences('<A^A>^^AvvvA', directional_keypad)
+        self.assertIn('v<<A>>^A<A>AvA<^AA>A<vAAA>^A', sequences)

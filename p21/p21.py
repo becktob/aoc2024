@@ -13,8 +13,8 @@ class Keypad:
         return self.char_positions[char]
 
 
-numeric_keypad_rows = '789', '456', '123', '-0A'
-numeric_keypad = Keypad(numeric_keypad_rows)
+numeric_keypad = Keypad(('789', '456', '123', '-0A'))
+directional_keypad = Keypad(('-^A', '<v>'))
 
 
 def shortest_key_sequences(sequence_to_push: str,
