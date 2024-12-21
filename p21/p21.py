@@ -1,3 +1,4 @@
+from functools import cache
 from itertools import combinations, product
 from typing import Iterable
 
@@ -19,7 +20,8 @@ directional_keypad = Keypad(('-^A', '<v>'))
 
 def shortest_key_sequences(sequence_to_push: str,
                            keypad_layout: Keypad = None,
-                           start_char='A') -> list[str]:
+                           start_char='A',
+                           simple_only=False) -> list[str]:
     if sequence_to_push == '':
         return ['']
 
@@ -34,13 +36,20 @@ def shortest_key_sequences(sequence_to_push: str,
     d_row = i_to - i_from
     row_char = ('v' if d_row > 0 else '^')
 
-    total_keys = abs(d_col) + abs(d_row)
-    indices_row = combinations(range(total_keys), abs(d_row))
-
     sequences_head = []
-    for indices in indices_row:
-        key_combination = "".join([row_char if i in indices else col_char for i in range(total_keys)]) + 'A'
-        sequences_head.append(key_combination)
+    if simple_only:
+        col_chars = abs(d_col) * col_char
+        row_chars = abs(d_row) * row_char
+        sequences_head.append(row_chars + col_chars + 'A')
+        if d_col != 0 and d_row !=0:
+            sequences_head.append(col_chars + row_chars + 'A')
+    else:
+        total_keys = abs(d_col) + abs(d_row)
+        indices_row = combinations(range(total_keys), abs(d_row))
+
+        for indices in indices_row:
+            key_combination = "".join([row_char if i in indices else col_char for i in range(total_keys)]) + 'A'
+            sequences_head.append(key_combination)
 
     sequences_tail = shortest_key_sequences(sequence_to_push[1:], keypad_layout, sequence_to_push[0])
     return [head + tail for head, tail in product(sequences_head, sequences_tail)]
@@ -57,8 +66,9 @@ def sequential_sequence(sequence_to_push: str, keypads: tuple):
     return [s for s in sequences if len(s) == shortest_len]
 
 
+@cache
 def shortest_button_to_button(b_from, b_to, keypads: tuple) -> list[str]:
-    sequences_this_keypad = shortest_key_sequences(b_to, keypads[0], b_from)
+    sequences_this_keypad = shortest_key_sequences(b_to, keypads[0], b_from, simple_only=True)
     if len(keypads) == 1:
         return sequences_this_keypad
 
@@ -76,7 +86,7 @@ def shortest_button_to_button(b_from, b_to, keypads: tuple) -> list[str]:
 def score_code(code: str):
     keypads = numeric_keypad, directional_keypad, directional_keypad
 
-    sequences = sequential_sequence(code, keypads)
+    sequences = shortest_button_to_button('A', code, keypads)
 
     shortest_len = min(map(len, sequences))
 

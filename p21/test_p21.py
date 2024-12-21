@@ -25,6 +25,12 @@ class Test(TestCase):
         self.assertIn('^<^A', sequences_1left_2up)
         self.assertIn('^^<A', sequences_1left_2up)
 
+    def test_multiple_possibilities_simple_only(self):
+        sequences_1left_2up = shortest_key_sequences('5', simple_only=True)
+        self.assertEqual(2, len(sequences_1left_2up))
+        self.assertIn('<^^A', sequences_1left_2up)
+        self.assertIn('^^<A', sequences_1left_2up)
+
     def test_029A_keypad(self):
         sequences = shortest_key_sequences('029A')
         self.assertEqual(3, len(sequences))
@@ -50,11 +56,15 @@ class Test(TestCase):
         self.assertIn('v<<A>>^A', shortest_button_to_button('A', '0', pads[:2]))
         self.assertIn('<vA<AA>>^AvAA<^A>A', shortest_button_to_button('A', '0', pads[:3]))
 
-    @skip('slow')
     def test_score_code(self):
-        self.assertEqual(68 * 29, score_code('029A'))
-        self.assertEqual(68 * 179, score_code('179A'))
+        for score, code in ((68 * 29, '029A'),
+                            (60 * 980, '980A'),
+                            (68 * 179, '179A'),
+                            (64 * 456, '456A'),
+                            (64 * 379, '379A')
+                            ):
+            with self.subTest(code):
+                self.assertEqual(score, score_code(code))
 
-    @skip('crashes')
     def test_solve_demo(self):
         self.assertEqual(126384, solve_part_1(demo_input_21))
