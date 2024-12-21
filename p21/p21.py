@@ -65,3 +65,7 @@ def score_code(code: str):
     shortest_len = min(map(len, sequences))
 
     return int(code.replace('A', '')) * shortest_len
+
+
+def solve_part_1(raw_input: str):
+    return sum(map(score_code, raw_input.splitlines()))

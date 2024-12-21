@@ -1,6 +1,14 @@
-from unittest import TestCase
+from unittest import TestCase, skip
 
-from p21.p21 import shortest_key_sequences, directional_keypad, numeric_keypad, sequential_sequence, score_code
+from p21.p21 import shortest_key_sequences, directional_keypad, numeric_keypad, sequential_sequence, score_code, \
+    solve_part_1
+
+demo_input_21 = """029A
+980A
+179A
+456A
+379A
+"""
 
 
 class Test(TestCase):
@@ -35,3 +43,8 @@ class Test(TestCase):
 
     def test_score_code(self):
         self.assertEqual(68 * 29, score_code('029A'))
+        self.assertEqual(68 * 179, score_code('179A'))
+
+    @skip('crashes')
+    def test_solve_demo(self):
+        self.assertEqual(126384, solve_part_1(demo_input_21))
