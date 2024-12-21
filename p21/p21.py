@@ -1,3 +1,5 @@
+from itertools import combinations, product
+
 numeric_keypad_rows = '789', '456', '123', '-0A'
 
 numeric_keypad = dict()
@@ -19,11 +21,17 @@ def shortest_key_sequences(sequence_to_push: str,
     i_to, j_to = keypad_layout[sequence_to_push[0]]
 
     d_col = j_to - j_from
-    col_chars = abs(d_col) * ('>' if d_col > 0 else '<')
+    col_char = ('>' if d_col > 0 else '<')
     d_row = i_to - i_from
-    row_chars = abs(d_row) * ('v' if d_col > 0 else '^')
+    row_char = ('v' if d_col > 0 else '^')
 
-    keys_this_char = col_chars + row_chars + 'A'
+    total_keys = abs(d_col) + abs(d_row)
+    indices_row = combinations(range(total_keys), abs(d_row))
+
+    sequences_head = []
+    for indices in indices_row:
+        key_combination = "".join([row_char if i in indices else col_char for i in range(total_keys)]) + 'A'
+        sequences_head.append(key_combination)
 
     sequences_tail = shortest_key_sequences(sequence_to_push[1:], keypad_layout, sequence_to_push[0])
-    return [keys_this_char + tail for tail in sequences_tail]
+    return [head + tail for head, tail in product(sequences_head, sequences_tail)]
