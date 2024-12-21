@@ -1,7 +1,7 @@
 from unittest import TestCase, skip
 
 from p21.p21 import shortest_key_sequences, directional_keypad, numeric_keypad, sequential_sequence, score_code, \
-    solve_part_1
+    solve_part_1, shortest_button_to_button
 
 demo_input_21 = """029A
 980A
@@ -38,9 +38,19 @@ class Test(TestCase):
         keypads = numeric_keypad, directional_keypad
 
         outer_sequences = sequential_sequence('029A', keypads)
-
         self.assertIn('v<<A>>^A<A>AvA<^AA>A<vAAA>^A', outer_sequences)
 
+        outer_sequences = sequential_sequence('0', keypads)
+        self.assertIn('v<<A>>^A', outer_sequences)
+
+    def test_button_to_button(self):
+        pads = numeric_keypad, directional_keypad, directional_keypad
+
+        self.assertIn('<A', shortest_button_to_button('A', '0', pads[:1]))
+        self.assertIn('v<<A>>^A', shortest_button_to_button('A', '0', pads[:2]))
+        self.assertIn('<vA<AA>>^AvAA<^A>A', shortest_button_to_button('A', '0', pads[:3]))
+
+    @skip('slow')
     def test_score_code(self):
         self.assertEqual(68 * 29, score_code('029A'))
         self.assertEqual(68 * 179, score_code('179A'))

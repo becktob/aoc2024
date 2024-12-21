@@ -46,7 +46,7 @@ def shortest_key_sequences(sequence_to_push: str,
     return [head + tail for head, tail in product(sequences_head, sequences_tail)]
 
 
-def sequential_sequence(sequence_to_push: str, keypads: Iterable[Keypad]):
+def sequential_sequence(sequence_to_push: str, keypads: tuple):
     sequences = [sequence_to_push]
 
     for keypad in keypads:
@@ -55,6 +55,22 @@ def sequential_sequence(sequence_to_push: str, keypads: Iterable[Keypad]):
     shortest_len = min(map(len, sequences))
 
     return [s for s in sequences if len(s) == shortest_len]
+
+
+def shortest_button_to_button(b_from, b_to, keypads: tuple) -> list[str]:
+    sequences_this_keypad = shortest_key_sequences(b_to, keypads[0], b_from)
+    if len(keypads) == 1:
+        return sequences_this_keypad
+
+    button_to_button = []
+    for seq in sequences_this_keypad:
+        seq_from_A = 'A' + seq
+        combinations_this_sequence = [shortest_button_to_button(f, t, keypads[1:]) for f, t in
+                                      zip(seq_from_A[:-1], seq_from_A[1:])]
+        combinations_this_sequence = ["".join(segments) for segments in product(*combinations_this_sequence)]
+        button_to_button += combinations_this_sequence
+
+    return button_to_button
 
 
 def score_code(code: str):
