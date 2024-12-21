@@ -52,4 +52,16 @@ def sequential_sequence(sequence_to_push: str, keypads: Iterable[Keypad]):
     for keypad in keypads:
         sequences = [s for inner in sequences for s in shortest_key_sequences(inner, keypad)]
 
-    return sequences
+    shortest_len = min(map(len, sequences))
+
+    return [s for s in sequences if len(s) == shortest_len]
+
+
+def score_code(code: str):
+    keypads = numeric_keypad, directional_keypad, directional_keypad
+
+    sequences = sequential_sequence(code, keypads)
+
+    shortest_len = min(map(len, sequences))
+
+    return int(code.replace('A', '')) * shortest_len

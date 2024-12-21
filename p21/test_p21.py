@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from p21.p21 import shortest_key_sequences, directional_keypad, numeric_keypad, sequential_sequence
+from p21.p21 import shortest_key_sequences, directional_keypad, numeric_keypad, sequential_sequence, score_code
 
 
 class Test(TestCase):
@@ -32,3 +32,6 @@ class Test(TestCase):
         outer_sequences = sequential_sequence('029A', keypads)
 
         self.assertIn('v<<A>>^A<A>AvA<^AA>A<vAAA>^A', outer_sequences)
+
+    def test_score_code(self):
+        self.assertEqual(68 * 29, score_code('029A'))
