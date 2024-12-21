@@ -1,15 +1,24 @@
 from itertools import combinations, product
+from typing import Iterable
+
+
+class Keypad:
+    def __init__(self, rows: Iterable[str]):
+        self.char_positions: dict[str, tuple[int, int]] = dict()
+        for i, row in enumerate(rows):
+            for j, char in enumerate(row):
+                self.char_positions[char] = (i, j) if char != '-' else None
+
+    def __getitem__(self, char: str):
+        return self.char_positions[char]
+
 
 numeric_keypad_rows = '789', '456', '123', '-0A'
-
-numeric_keypad = dict()
-for i, row in enumerate(numeric_keypad_rows):
-    for j, char in enumerate(row):
-        numeric_keypad[char] = (i, j) if char != '-' else None
+numeric_keypad = Keypad(numeric_keypad_rows)
 
 
 def shortest_key_sequences(sequence_to_push: str,
-                           keypad_layout: dict[str, tuple[int, int]] = None,
+                           keypad_layout: Keypad = None,
                            start_char='A') -> list[str]:
     if sequence_to_push == '':
         return ['']
