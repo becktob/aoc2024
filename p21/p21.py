@@ -36,20 +36,19 @@ def shortest_key_sequences(sequence_to_push: str,
     d_row = i_to - i_from
     row_char = ('v' if d_row > 0 else '^')
 
-    sequences_head = []
+    sequences_head = set()
     if simple_only:
         col_chars = abs(d_col) * col_char
         row_chars = abs(d_row) * row_char
-        sequences_head.append(row_chars + col_chars + 'A')
-        if d_col != 0 and d_row !=0:
-            sequences_head.append(col_chars + row_chars + 'A')
+        sequences_head.add(row_chars + col_chars + 'A')
+        sequences_head.add(col_chars + row_chars + 'A')
     else:
         total_keys = abs(d_col) + abs(d_row)
         indices_row = combinations(range(total_keys), abs(d_row))
 
         for indices in indices_row:
             key_combination = "".join([row_char if i in indices else col_char for i in range(total_keys)]) + 'A'
-            sequences_head.append(key_combination)
+            sequences_head.add(key_combination)
 
     sequences_tail = shortest_key_sequences(sequence_to_push[1:], keypad_layout, sequence_to_push[0])
     return [head + tail for head, tail in product(sequences_head, sequences_tail)]
