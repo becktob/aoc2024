@@ -23,7 +23,6 @@ numeric_keypad = Keypad(('789', '456', '123', '-0A'))
 directional_keypad = Keypad(('-^A', '<v>'))
 
 
-@cache
 def shortest_key_sequences(sequence_to_push: str,
                            keypad_layout: Keypad = None,
                            start_char='A',
@@ -76,7 +75,6 @@ def sequential_sequence(sequence_to_push: str, keypads: tuple):
     return [s for s in sequences if len(s) == shortest_len]
 
 
-@cache
 def shortest_button_to_button(b_from, b_to, keypads: tuple) -> list[str]:
     sequences_this_keypad = shortest_key_sequences(b_to, keypads[0], b_from, simple_only=True)
     if len(keypads) == 1:

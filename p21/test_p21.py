@@ -88,4 +88,3 @@ class Test(TestCase):
             self.assertEqual(258369757013802, solve_part_2(f.read()))
 
         print(count_shortest_button_to_button.cache_info())
-        print(shortest_key_sequences.cache_info())
