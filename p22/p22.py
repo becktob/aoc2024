@@ -27,7 +27,7 @@ def solve_part_1(raw_input: str) -> int:
 def sale_from_sequence(initial: int, sequence: tuple[int, int, int, int]) -> int:
     value_from_sequence = value_dict(initial)
 
-    return value_from_sequence.get(sequence)
+    return value_from_sequence.get(sequence, 0)
 
 
 def value_dict(initial):
@@ -55,4 +55,4 @@ def solve_part_2(raw_input: str):
 
     best_return = max(sequence_returns.items(), key=lambda item: item[1])
 
-    return best_return[0]
+    return best_return[1]
