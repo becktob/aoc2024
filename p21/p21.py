@@ -1,3 +1,4 @@
+import sys
 from functools import cache
 from itertools import combinations, product
 from typing import Iterable
@@ -94,18 +95,15 @@ def shortest_button_to_button(b_from, b_to, keypads: tuple) -> list[str]:
 
 @cache
 def count_shortest_button_to_button(b_from, b_to, keypads: tuple) -> int:
-    sequences_this_keypad = shortest_key_sequences(b_to, keypads[0], b_from, simple_only=True)
-    if len(keypads) == 1:
-        return min(map(len, sequences_this_keypad))
+    if len(keypads) == 0:
+        return 1
 
-    button_to_button = []
-    for seq in sequences_this_keypad:
-        seq_from_A = 'A' + seq
-        this_b2b = [count_shortest_button_to_button(f, t, keypads[1:]) for f, t in
-                    zip(seq_from_A[:-1], seq_from_A[1:])]
-        button_to_button.append(sum(this_b2b))
+    button_to_button = sys.maxsize
+    for seq in shortest_key_sequences(b_to, keypads[0], b_from, simple_only=True):
+        this_b2b = sum(count_shortest_button_to_button(f, t, keypads[1:]) for f, t in zip('A' + seq, seq))
+        button_to_button = min(button_to_button, this_b2b)
 
-    return min(button_to_button)
+    return button_to_button
 
 
 def score_code(code: str):
