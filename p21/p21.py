@@ -96,15 +96,14 @@ def shortest_button_to_button(b_from, b_to, keypads: tuple) -> list[str]:
 def count_shortest_button_to_button(b_from, b_to, keypads: tuple) -> int:
     sequences_this_keypad = shortest_key_sequences(b_to, keypads[0], b_from, simple_only=True)
     if len(keypads) == 1:
-        return len(sequences_this_keypad)
+        return min(map(len, sequences_this_keypad))
 
     button_to_button = []
     for seq in sequences_this_keypad:
         seq_from_A = 'A' + seq
-        combo_lens_this_sequence = [map(len, shortest_button_to_button(f, t, keypads[1:])) for f, t in
-                                    zip(seq_from_A[:-1], seq_from_A[1:])]
-        lengths_this_sequence = [sum(lens) for lens in product(*combo_lens_this_sequence)]
-        button_to_button += lengths_this_sequence
+        this_b2b = [count_shortest_button_to_button(f, t, keypads[1:]) for f, t in
+                    zip(seq_from_A[:-1], seq_from_A[1:])]
+        button_to_button.append(sum(this_b2b))
 
     return min(button_to_button)
 
