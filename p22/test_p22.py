@@ -35,7 +35,7 @@ class Test(TestCase):
     def test_solve_demo_2(self):
         self.assertEqual(23, solve_part_2(demo_input_22_2))
 
-    @skip('slow, wrong')
+    @skip('wrong')
     def test_solve_part_2(self):
         with open('p22/input') as f:
             self.assertEqual(1, solve_part_2(f.read()))

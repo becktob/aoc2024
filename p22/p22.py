@@ -1,4 +1,5 @@
 import itertools
+from collections import defaultdict
 
 
 def mix_prune(number: int, value: int) -> int:
@@ -50,8 +51,10 @@ def solve_part_2(raw_input: str):
     initial_secrets = [int(l) for l in raw_input.splitlines()]
     value_dicts = [value_dict(i) for i in initial_secrets]
 
-    sequences = itertools.product(range(-9, 10), repeat=4)
-    sequence_returns = {s: sum(vd.get(s, 0) for vd in value_dicts) for s in sequences}
+    sequence_returns = defaultdict(int)
+    for vd in value_dicts:
+        for seq, val in vd.items():
+            sequence_returns[seq] += val
 
     best_return = max(sequence_returns.items(), key=lambda item: item[1])
 
