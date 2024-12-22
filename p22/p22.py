@@ -30,7 +30,7 @@ def sale_from_sequence(initial: int, sequence: tuple[int, int, int, int]) -> int
     return value_from_sequence.get(sequence, 0)
 
 
-def value_dict(initial, num_evol=2000):
+def value_dict(initial, num_evol=2001):
     value_from_sequence = dict()
     secrets = []
     number = initial

@@ -35,19 +35,16 @@ class Test(TestCase):
     def test_solve_demo_2(self):
         self.assertEqual(23, solve_part_2(demo_input_22_2))
 
-    @skip('wrong')
     def test_solve_part_2(self):
         with open('p22/input') as f:
-            self.assertEqual(1, solve_part_2(f.read()))
-            # 1453 too high
-            # 1442 wrong
+            self.assertEqual(1449, solve_part_2(f.read()))
 
     def test_try_sequence_on_input(self):
         with open('p22/input') as f:
             initials = [int(l) for l in f.readlines()]
         sequence = (0, -1, -1, 2)
         total = sum(sale_from_sequence(i, sequence) for i in initials)
-        self.assertEqual(1442, total)
+        self.assertEqual(1449, total)
 
     def test_value_dict(self):
         changes = list(value_dict(123, 10).keys())
