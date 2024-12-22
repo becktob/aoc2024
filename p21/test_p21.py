@@ -1,7 +1,7 @@
-from unittest import TestCase, skip
+from unittest import TestCase
 
 from p21.p21 import shortest_key_sequences, directional_keypad, numeric_keypad, sequential_sequence, score_code, \
-    solve_part_1, shortest_button_to_button, solve_part_2, score_code_count_only
+    solve_part_1, shortest_button_to_button, solve_part_2, score_code_count_only, count_shortest_button_to_button
 
 demo_input_21 = """029A
 980A
@@ -83,7 +83,9 @@ class Test(TestCase):
         with open('p21/input') as f:
             self.assertEqual(213536, solve_part_1(f.read()))
 
-    @skip('crashes')
     def test_solve_part_2(self):
         with open('p21/input') as f:
-            self.assertEqual(1, solve_part_2(f.read()))
+            self.assertEqual(258369757013802, solve_part_2(f.read()))
+
+        print(count_shortest_button_to_button.cache_info())
+        print(shortest_key_sequences.cache_info())
