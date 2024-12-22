@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from p22.p22 import evolve_secret_number, solve_part_1, sale_from_sequence
+from p22.p22 import evolve_secret_number, solve_part_1, sale_from_sequence, solve_part_2
 
 demo_input_22 = """1
 10
@@ -31,3 +31,6 @@ class Test(TestCase):
         self.assertEqual(7, sale_from_sequence(2, sequence))
         self.assertEqual(None, sale_from_sequence(3, sequence))
         self.assertEqual(9, sale_from_sequence(2024, sequence))
+
+    def test_solve_demo_2(self):
+        self.assertEqual((-2, 1, -1, 3), solve_part_2(demo_input_22_2))
