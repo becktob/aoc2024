@@ -1,4 +1,3 @@
-import itertools
 from collections import defaultdict
 
 
@@ -31,16 +30,16 @@ def sale_from_sequence(initial: int, sequence: tuple[int, int, int, int]) -> int
     return value_from_sequence.get(sequence, 0)
 
 
-def value_dict(initial):
+def value_dict(initial, num_evol=2000):
     value_from_sequence = dict()
     secrets = []
     number = initial
-    for _ in range(2000):
-        number = evolve_secret_number(number)
+    for _ in range(num_evol):
         secrets.append(number)
+        number = evolve_secret_number(number)
     public = [s % 10 for s in secrets]
     changes = [s2 - s1 for s1, s2 in zip(public, public[1:])]
-    for start in range(4, 2000 - 4):
+    for start in range(num_evol - 4):
         this_sequence = tuple(changes[start: start + 4])
         if this_sequence not in value_from_sequence:
             value_from_sequence[this_sequence] = public[start + 4]
@@ -57,5 +56,6 @@ def solve_part_2(raw_input: str):
             sequence_returns[seq] += val
 
     best_return = max(sequence_returns.items(), key=lambda item: item[1])
+    print(best_return)
 
     return best_return[1]

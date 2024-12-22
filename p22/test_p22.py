@@ -1,6 +1,6 @@
 from unittest import TestCase, skip
 
-from p22.p22 import evolve_secret_number, solve_part_1, sale_from_sequence, solve_part_2
+from p22.p22 import evolve_secret_number, solve_part_1, sale_from_sequence, solve_part_2, value_dict
 
 demo_input_22 = """1
 10
@@ -40,10 +40,16 @@ class Test(TestCase):
         with open('p22/input') as f:
             self.assertEqual(1, solve_part_2(f.read()))
             # 1453 too high
+            # 1442 wrong
 
     def test_try_sequence_on_input(self):
         with open('p22/input') as f:
             initials = [int(l) for l in f.readlines()]
         sequence = (0, -1, -1, 2)
         total = sum(sale_from_sequence(i, sequence) for i in initials)
-        self.assertEqual(1453, total)
+        self.assertEqual(1442, total)
+
+    def test_value_dict(self):
+        changes = list(value_dict(123, 10).keys())
+        self.assertEqual((-3, 6, -1, -1), changes[0])
+        self.assertEqual((2, -2, 0, -2), changes[-1])
