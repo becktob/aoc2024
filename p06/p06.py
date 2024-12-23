@@ -7,26 +7,32 @@ directions = {'^': (-1, 0),
               'v': (+1, 0),
               '<': (0, -1)}
 
+type State = tuple[tuple[int, int], str]
 
-def one_step(maze, current_position=None, current_direction=None):
-    if current_position is None and current_direction is None:
-        current_direction = next(filter(lambda d: d in maze, directions.keys()))
-        current_position = numpy.argwhere(maze == current_direction)
-        assert 1 == len(current_position)
-        current_position = current_position[0]
+
+def one_step(maze, current_state: None | State = None) -> (numpy.ndarray, State):
+    if current_state is None:
+        direction = next(filter(lambda d: d in maze, directions.keys()))
+        position = numpy.argwhere(maze == direction)
+        assert 1 == len(position)
+        position = position[0]
+        current_state = tuple(position.tolist()), direction
+
+    current_position, current_direction = current_state
     maze[*current_position] = 'X'  # may be overwritten on turn
 
-    next_position = current_position + directions[current_direction]
-    if not in_bounds(next_position, maze):
-        return maze, None, None
+    dir_ij = directions[current_direction]
+    next_position = (current_position[0] + dir_ij[0], current_position[1] + dir_ij[1])
+    if not in_bounds(numpy.array(next_position), maze):
+        return maze, None
 
     if maze[*next_position] != '#':  # forward
         maze[*next_position] = current_direction
-        return maze, next_position, current_direction
+        return maze, (next_position, current_direction)
     else:  # turn
         new_direction = direction_after_turn(current_direction)
         maze[*current_position] = new_direction
-        return maze, current_position, new_direction
+        return maze, (current_position, new_direction)
 
 
 def direction_after_turn(current_direction):
@@ -45,23 +51,24 @@ def solve_part_1(raw_input):
 
 
 def run(maze):
-    maze, next_position, next_direction = one_step(maze, None)
+    maze, next_state = one_step(maze, None)
 
     visited = set()
 
-    while next_position is not None:
-        state = tuple(next_position.tolist()), next_direction
-        if state in visited:
+    while next_state is not None:
+        if next_state in visited:
             return maze, True
-        visited.add(state)
+        visited.add(next_state)
 
-        maze, next_position, next_direction = one_step(maze, next_position, next_direction)
+        maze, next_state = one_step(maze, next_state)
 
     return maze, False
+
 
 def is_loop(maze):
     maze, is_loop = run(maze)
     return is_loop
+
 
 def solve_part_2(raw_input):
     maze = string_to_array(raw_input)
@@ -82,4 +89,3 @@ def solve_part_2(raw_input):
             looping_blocks.append(block)
 
     return len(looping_blocks)
-
