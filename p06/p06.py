@@ -49,19 +49,26 @@ def solve_part_1(raw_input):
     return len(visited_positions)
 
 
-def run(maze) -> (bool, set[State]):
-    visited = {state := find_start(maze)}
+def run(maze, previously_visited: list[State] | None = None) -> (bool, list[State]):
+    visited = [state := find_start(maze)]
+
+    if previously_visited:
+        visited = previously_visited
+        state = visited[-1]
+
+    visited_set = set(visited)
 
     while (state := one_step(maze, state)) is not None:
-        if state in visited:
+        if state in visited_set:
             return True, visited
-        visited.add(state)
+        visited.append(state)
+        visited_set.add(state)
 
     return False, visited
 
 
-def is_loop(maze):
-    is_loop, visited = run(maze)
+def is_loop(maze, previously_visited: list[State] = None):
+    is_loop, visited = run(maze, previously_visited)
     return is_loop
 
 
@@ -71,16 +78,16 @@ def solve_part_2(raw_input):
     # only need to try blocking places visited by basic maze
     basic_maze = maze.copy()
     _, visited_in_basic = run(basic_maze)
-    visited_positions = set(state[0] for state in visited_in_basic)
 
-    looping_blocks = []
-    for n, block in enumerate(visited_positions):
+    looping_blocks = set()
+    for n, state in enumerate(visited_in_basic):
+        block, _ = state
         if maze[*block] in directions.keys():
             continue
         blocked_maze = maze.copy()
         blocked_maze[*block] = '#'
-        if is_loop(blocked_maze):
+        if is_loop(blocked_maze):  # Todo: why doesn't passing (..., visited_in_basic[:n]) work here?
             print(n, block)
-            looping_blocks.append(block)
+            looping_blocks.add(block)
 
     return len(looping_blocks)
