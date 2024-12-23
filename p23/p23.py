@@ -50,8 +50,7 @@ def find_largest_direct_group(raw_input: str) -> tuple[str]:
 
     largest_direct = ()
     for group_size in range(len(largest_direct) + 1, largest_group):
-        group = find_any_direct_group_of_size(node_neighbors, group_size)
-        if group is not None:
+        if group := find_any_direct_group_of_size(node_neighbors, group_size):
             largest_direct = group
 
     return largest_direct
