@@ -1,6 +1,8 @@
+from copy import deepcopy
+
 import numpy
 
-from helpers import string_to_array, in_bounds
+from helpers import string_to_array
 
 directions = {'^': (-1, 0),
               '>': (0, +1),
@@ -10,27 +12,34 @@ directions = {'^': (-1, 0),
 type State = tuple[tuple[int, int], str]
 
 
-def one_step(maze, state: State = None) -> State | None:
+class Maze:
+    def __init__(self, raw_input):
+        maze = string_to_array(raw_input)
+        self.shape = maze.shape
+        self.walls = set(tuple(ij.tolist()) for ij in numpy.argwhere(maze == '#'))
+        self.start = self._find_start(maze)
+
+    def _find_start(self, maze) -> State:
+        direction = next(filter(lambda d: d in maze, directions.keys()))
+        position = numpy.argwhere(maze == direction)
+        assert 1 == len(position)
+        position = position[0]
+        return (int(position[0]), int(position[1])), str(direction)
+
+
+def one_step(maze: Maze, state: State = None) -> State | None:
     current_position, current_direction = state
 
     dir_ij = directions[current_direction]
     next_position = (current_position[0] + dir_ij[0], current_position[1] + dir_ij[1])
-    if not in_bounds(numpy.array(next_position), maze):
+    if not all(0 <= ij < shape for ij, shape in zip(next_position, maze.shape)):
         return None
 
-    if maze[*next_position] != '#':  # forward
+    if next_position not in maze.walls:  # forward
         return next_position, current_direction
     else:  # turn
         new_direction = direction_after_turn(current_direction)
         return current_position, new_direction
-
-
-def find_start(maze) -> State:
-    direction = next(filter(lambda d: d in maze, directions.keys()))
-    position = numpy.argwhere(maze == direction)
-    assert 1 == len(position)
-    position = position[0]
-    return (int(position[0]), int(position[1])), str(direction)
 
 
 def direction_after_turn(current_direction):
@@ -41,7 +50,7 @@ def direction_after_turn(current_direction):
 
 
 def solve_part_1(raw_input):
-    maze = string_to_array(raw_input)
+    maze = Maze(raw_input)
 
     _, visited_states = run(maze)
 
@@ -49,8 +58,8 @@ def solve_part_1(raw_input):
     return len(visited_positions)
 
 
-def run(maze, previously_visited: list[State] | None = None) -> (bool, list[State]):
-    visited = [state := find_start(maze)]
+def run(maze: Maze, previously_visited: list[State] | None = None) -> (bool, list[State]):
+    visited = [state := maze.start]
 
     if previously_visited:
         visited = previously_visited
@@ -67,25 +76,25 @@ def run(maze, previously_visited: list[State] | None = None) -> (bool, list[Stat
     return False, visited
 
 
-def is_loop(maze, previously_visited: list[State] = None):
+def is_loop(maze: Maze, previously_visited: list[State] = None):
     is_loop, visited = run(maze, previously_visited)
     return is_loop
 
 
 def solve_part_2(raw_input):
-    maze = string_to_array(raw_input)
+    maze = Maze(raw_input)
 
     # only need to try blocking places visited by basic maze
-    basic_maze = maze.copy()
+    basic_maze = deepcopy(maze)
     _, visited_in_basic = run(basic_maze)
 
     looping_blocks = set()
     for n, state in enumerate(visited_in_basic):
         block, _ = state
-        if maze[*block] in directions.keys():
+        if block == maze.start:
             continue
-        blocked_maze = maze.copy()
-        blocked_maze[*block] = '#'
+        blocked_maze = deepcopy(maze)
+        blocked_maze.walls.add(block)
         if is_loop(blocked_maze):  # Todo: why doesn't passing (..., visited_in_basic[:n]) work here?
             print(n, block)
             looping_blocks.add(block)
