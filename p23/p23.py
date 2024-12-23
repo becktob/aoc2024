@@ -23,4 +23,4 @@ def find_direct_triplets(raw_input: str) -> set[tuple[str]]:
 def solve_part_1(raw_input: str):
     triplets = find_direct_triplets(raw_input)
 
-    return sum(1 for t in triplets if any('t' in node for node in t))
+    return sum(1 for t in triplets if any(node[0] == 't' for node in t))
