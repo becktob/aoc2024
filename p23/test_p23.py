@@ -38,7 +38,7 @@ td-yn"""
 
 
 class Test(TestCase):
-    def test_find_gropus(self):
+    def test_find_triplets(self):
         groups = find_direct_triplets(demo_input_23)
         self.assertEqual(12, len(groups))
 
