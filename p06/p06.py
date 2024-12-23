@@ -19,7 +19,8 @@ class Maze:
         self.walls = set(tuple(ij.tolist()) for ij in numpy.argwhere(maze == '#'))
         self.start = self._find_start(maze)
 
-    def _find_start(self, maze) -> State:
+    @staticmethod
+    def _find_start(maze) -> State:
         direction = next(filter(lambda d: d in maze, directions.keys()))
         position = numpy.argwhere(maze == direction)
         assert 1 == len(position)
@@ -91,8 +92,7 @@ def solve_part_2(raw_input):
     looping_blocks = set()
     for n, state in enumerate(visited_in_basic):
         block, _ = state
-        if block == maze.start:
-            continue
+
         blocked_maze = deepcopy(maze)
         blocked_maze.walls.add(block)
         if is_loop(blocked_maze):  # Todo: why doesn't passing (..., visited_in_basic[:n]) work here?
