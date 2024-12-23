@@ -28,3 +28,17 @@ def solve_part_1(raw_input: str):
     triplets = find_direct_triplets(raw_input)
 
     return sum(1 for t in triplets if any(node[0] == 't' for node in t))
+
+
+def find_groups(raw_input: str):
+    pairs = raw_input.splitlines()
+    node_groups = defaultdict(set)
+    for pair in pairs:
+        n, m = pair.split('-')
+        group = {m, n}
+        group.update(node_groups[m])
+        group.update(node_groups[n])
+        for k in group:
+            node_groups[k] = group
+
+    return set(tuple(g) for g in node_groups.values())
