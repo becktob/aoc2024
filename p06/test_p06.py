@@ -2,7 +2,7 @@ import unittest
 from unittest import TestCase
 
 from helpers import string_to_array
-from p06.p06 import one_step, solve_part_1, is_loop, solve_part_2
+from p06.p06 import one_step, solve_part_1, is_loop, solve_part_2, find_start
 
 demo_input_6 = """....#.....
 .........#
@@ -33,8 +33,9 @@ class Test(TestCase):
         maze = string_to_array(demo_input_6)
         maze_5 = string_to_array(demo_6_step_5)
 
+        state = find_start(maze)
         for _ in range(5):
-            maze, *_ = one_step(maze)
+            maze, state = one_step(maze, state)
 
         self.assertSequenceEqual(maze.tolist(), maze_5.tolist())
 
@@ -44,8 +45,9 @@ class Test(TestCase):
         maze_6 = maze_5
         maze_6[maze_6 == '^'] = '>'
 
+        state = find_start(maze)
         for _ in range(6):
-            maze, *_ = one_step(maze)
+            maze, state = one_step(maze, state)
 
         self.assertSequenceEqual(maze.tolist(), maze_6.tolist())
 

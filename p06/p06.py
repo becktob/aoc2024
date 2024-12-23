@@ -10,15 +10,8 @@ directions = {'^': (-1, 0),
 type State = tuple[tuple[int, int], str]
 
 
-def one_step(maze, current_state: None | State = None) -> (numpy.ndarray, State):
-    if current_state is None:
-        direction = next(filter(lambda d: d in maze, directions.keys()))
-        position = numpy.argwhere(maze == direction)
-        assert 1 == len(position)
-        position = position[0]
-        current_state = tuple(position.tolist()), direction
-
-    current_position, current_direction = current_state
+def one_step(maze, state: State = None) -> (numpy.ndarray, State):
+    current_position, current_direction = state
     maze[*current_position] = 'X'  # may be overwritten on turn
 
     dir_ij = directions[current_direction]
@@ -33,6 +26,14 @@ def one_step(maze, current_state: None | State = None) -> (numpy.ndarray, State)
         new_direction = direction_after_turn(current_direction)
         maze[*current_position] = new_direction
         return maze, (current_position, new_direction)
+
+
+def find_start(maze) -> State:
+    direction = next(filter(lambda d: d in maze, directions.keys()))
+    position = numpy.argwhere(maze == direction)
+    assert 1 == len(position)
+    position = position[0]
+    return (int(position[0]), int(position[1])), str(direction)
 
 
 def direction_after_turn(current_direction):
@@ -51,7 +52,8 @@ def solve_part_1(raw_input):
 
 
 def run(maze):
-    maze, next_state = one_step(maze, None)
+    start_state = find_start(maze)
+    maze, next_state = one_step(maze, start_state)
 
     visited = set()
 
