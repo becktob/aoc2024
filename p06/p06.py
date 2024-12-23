@@ -10,19 +10,19 @@ directions = {'^': (-1, 0),
 type State = tuple[tuple[int, int], str]
 
 
-def one_step(maze, state: State = None) -> (numpy.ndarray, State):
+def one_step(maze, state: State = None) -> State|None:
     current_position, current_direction = state
 
     dir_ij = directions[current_direction]
     next_position = (current_position[0] + dir_ij[0], current_position[1] + dir_ij[1])
     if not in_bounds(numpy.array(next_position), maze):
-        return maze, None
+        return None
 
     if maze[*next_position] != '#':  # forward
-        return maze, (next_position, current_direction)
+        return next_position, current_direction
     else:  # turn
         new_direction = direction_after_turn(current_direction)
-        return maze, (current_position, new_direction)
+        return current_position, new_direction
 
 
 def find_start(maze) -> State:
@@ -55,7 +55,7 @@ def run(maze):
     while state is not None:
         visited.add(state)
 
-        maze, state = one_step(maze, state)
+        state = one_step(maze, state)
 
         if state in visited:
             return maze, True, visited

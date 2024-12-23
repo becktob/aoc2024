@@ -34,7 +34,7 @@ class Test(TestCase):
 
         state = find_start(maze)
         for _ in range(5):
-            maze, state = one_step(maze, state)
+            state = one_step(maze, state)
 
         self.assertEqual(((1, 4), '^'), state)
 
@@ -43,7 +43,7 @@ class Test(TestCase):
 
         state = find_start(maze)
         for _ in range(6):
-            maze, state = one_step(maze, state)
+            state = one_step(maze, state)
 
         self.assertEqual(((1, 4), '>'), state)
 
