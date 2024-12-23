@@ -1,7 +1,7 @@
 from tokenize import group
 from unittest import TestCase
 
-from p23.p23 import find_direct_triplets
+from p23.p23 import find_direct_triplets, solve_part_1
 
 demo_input_23 = """kh-tc
 qp-kh
@@ -41,3 +41,6 @@ class Test(TestCase):
     def test_find_gropus(self):
         groups = find_direct_triplets(demo_input_23)
         self.assertEqual(12, len(groups))
+
+    def test_solve_demo_1(self):
+        self.assertEqual(7, solve_part_1(demo_input_23))
