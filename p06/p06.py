@@ -50,17 +50,15 @@ def solve_part_1(raw_input):
 
 
 def run(maze):
-    start_state = find_start(maze)
-    maze, next_state = one_step(maze, start_state)
+    visited = {state := find_start(maze)}
 
-    visited = {start_state}
+    while state is not None:
+        visited.add(state)
 
-    while next_state is not None:
-        if next_state in visited:
+        maze, state = one_step(maze, state)
+
+        if state in visited:
             return maze, True, visited
-        visited.add(next_state)
-
-        maze, next_state = one_step(maze, next_state)
 
     return maze, False, visited
 
