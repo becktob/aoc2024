@@ -2,7 +2,7 @@ from collections import defaultdict
 from itertools import combinations
 
 
-def find_neighbors(raw_input):
+def find_neighbors(raw_input: str) -> dict[str, set[str]]:
     pairs = raw_input.splitlines()
     node_neighbors = defaultdict(set)
     for pair in pairs:
@@ -42,3 +42,23 @@ def find_groups(raw_input: str):
             node_groups[k] = group
 
     return set(tuple(g) for g in node_groups.values())
+
+
+def find_largest_direct_group(raw_input: str) -> tuple[str]:
+    node_neighbors = find_neighbors(raw_input)
+
+    largest_direct = ()
+    for node, neighbors in node_neighbors.items():
+        for group_size in range(len(largest_direct) + 1, len(neighbors)):
+            group = find_any_direct_group_of_size(node_neighbors, group_size)
+            if group is not None:
+                largest_direct = group
+
+    return largest_direct
+
+
+def find_any_direct_group_of_size(neighbors: dict[str, set[str]], size: int) -> tuple[str]|None:
+    for group in combinations(neighbors, size):
+        if all(n in neighbors[m] for n, m in combinations(group, 2)):
+            return tuple(sorted(group))
+    return None
