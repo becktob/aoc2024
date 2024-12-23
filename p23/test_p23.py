@@ -1,4 +1,3 @@
-from tokenize import group
 from unittest import TestCase
 
 from p23.p23 import find_direct_triplets, solve_part_1, find_groups, find_largest_direct_group, solve_part_2
@@ -63,3 +62,7 @@ class Test(TestCase):
 
     def test_solve_demo_2(self):
         self.assertEqual('co,de,ka,ta', solve_part_2(demo_input_23))
+
+    def test_solve_part_2(self):
+        with open('p23/input') as f:
+            self.assertEqual('bc,bf,do,dw,dx,ll,ol,qd,sc,ua,xc,yu,zt', solve_part_2(f.read()))

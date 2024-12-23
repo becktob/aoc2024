@@ -46,21 +46,22 @@ def find_groups(raw_input: str):
 
 def find_largest_direct_group(raw_input: str) -> tuple[str]:
     node_neighbors = find_neighbors(raw_input)
+    largest_group = max(len(g) for g in node_neighbors.values())
 
     largest_direct = ()
-    for node, neighbors in node_neighbors.items():
-        for group_size in range(len(largest_direct) + 1, len(neighbors)):
-            group = find_any_direct_group_of_size(node_neighbors, group_size)
-            if group is not None:
-                largest_direct = group
+    for group_size in range(len(largest_direct) + 1, largest_group):
+        group = find_any_direct_group_of_size(node_neighbors, group_size)
+        if group is not None:
+            largest_direct = group
 
     return largest_direct
 
 
 def find_any_direct_group_of_size(neighbors: dict[str, set[str]], size: int) -> tuple[str] | None:
-    for group in combinations(neighbors, size):
-        if all(n in neighbors[m] for n, m in combinations(group, 2)):
-            return tuple(sorted(group))
+    for node, this_nodes_neighbors in neighbors.items():
+        for group in combinations(this_nodes_neighbors, size):
+            if all(n in neighbors[m] for n, m in combinations(group, 2)):
+                return tuple(sorted(group))
     return None
 
 
