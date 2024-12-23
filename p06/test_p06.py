@@ -31,25 +31,21 @@ demo_6_step_5 = """....#.....
 class Test(TestCase):
     def test_one_step_forward(self):
         maze = string_to_array(demo_input_6)
-        maze_5 = string_to_array(demo_6_step_5)
 
         state = find_start(maze)
         for _ in range(5):
             maze, state = one_step(maze, state)
 
-        self.assertSequenceEqual(maze.tolist(), maze_5.tolist())
+        self.assertEqual(((1, 4), '^'), state)
 
     def test_one_step_turn(self):
         maze = string_to_array(demo_input_6)
-        maze_5 = string_to_array(demo_6_step_5)
-        maze_6 = maze_5
-        maze_6[maze_6 == '^'] = '>'
 
         state = find_start(maze)
         for _ in range(6):
             maze, state = one_step(maze, state)
 
-        self.assertSequenceEqual(maze.tolist(), maze_6.tolist())
+        self.assertEqual(((1, 4), '>'), state)
 
     def test_solve_demo_part_1(self):
         self.assertEqual(41, solve_part_1(demo_input_6))

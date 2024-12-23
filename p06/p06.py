@@ -12,7 +12,6 @@ type State = tuple[tuple[int, int], str]
 
 def one_step(maze, state: State = None) -> (numpy.ndarray, State):
     current_position, current_direction = state
-    maze[*current_position] = 'X'  # may be overwritten on turn
 
     dir_ij = directions[current_direction]
     next_position = (current_position[0] + dir_ij[0], current_position[1] + dir_ij[1])
@@ -20,11 +19,9 @@ def one_step(maze, state: State = None) -> (numpy.ndarray, State):
         return maze, None
 
     if maze[*next_position] != '#':  # forward
-        maze[*next_position] = current_direction
         return maze, (next_position, current_direction)
     else:  # turn
         new_direction = direction_after_turn(current_direction)
-        maze[*current_position] = new_direction
         return maze, (current_position, new_direction)
 
 
@@ -46,29 +43,30 @@ def direction_after_turn(current_direction):
 def solve_part_1(raw_input):
     maze = string_to_array(raw_input)
 
-    maze, _ = run(maze)
+    maze, _, visited_states = run(maze)
 
-    return len(numpy.argwhere(maze == 'X'))
+    visited_positions = set(state[0] for state in visited_states)
+    return len(visited_positions)
 
 
 def run(maze):
     start_state = find_start(maze)
     maze, next_state = one_step(maze, start_state)
 
-    visited = set()
+    visited = {start_state}
 
     while next_state is not None:
         if next_state in visited:
-            return maze, True
+            return maze, True, visited
         visited.add(next_state)
 
         maze, next_state = one_step(maze, next_state)
 
-    return maze, False
+    return maze, False, visited
 
 
 def is_loop(maze):
-    maze, is_loop = run(maze)
+    maze, is_loop, visited = run(maze)
     return is_loop
 
 
@@ -77,11 +75,11 @@ def solve_part_2(raw_input):
 
     # only need to try blocking places visited by basic maze
     basic_maze = maze.copy()
-    basic_run, *_ = run(basic_maze)
-    visited_in_basic = numpy.argwhere(basic_run == 'X')
+    basic_run, _, visited_in_basic = run(basic_maze)
+    visited_positions = set(state[0] for state in visited_in_basic)
 
     looping_blocks = []
-    for n, block in enumerate(visited_in_basic):
+    for n, block in enumerate(visited_positions):
         if maze[*block] in directions.keys():
             continue
         blocked_maze = maze.copy()
