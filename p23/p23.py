@@ -2,14 +2,18 @@ from collections import defaultdict
 from itertools import combinations
 
 
-def find_direct_triplets(raw_input: str) -> set[tuple[str]]:
+def find_neighbors(raw_input):
     pairs = raw_input.splitlines()
-
     node_neighbors = defaultdict(set)
     for pair in pairs:
         edge = pair.split('-')
         for node in edge:
             node_neighbors[node].update(edge)
+    return node_neighbors
+
+
+def find_direct_triplets(raw_input: str) -> set[tuple[str]]:
+    node_neighbors = find_neighbors(raw_input)
 
     direct_triplets = set()
     for node, neighbors in node_neighbors.items():
