@@ -10,7 +10,7 @@ directions = {'^': (-1, 0),
 type State = tuple[tuple[int, int], str]
 
 
-def one_step(maze, state: State = None) -> State|None:
+def one_step(maze, state: State = None) -> State | None:
     current_position, current_direction = state
 
     dir_ij = directions[current_direction]
@@ -52,13 +52,10 @@ def solve_part_1(raw_input):
 def run(maze):
     visited = {state := find_start(maze)}
 
-    while state is not None:
-        visited.add(state)
-
-        state = one_step(maze, state)
-
+    while (state := one_step(maze, state)) is not None:
         if state in visited:
             return maze, True, visited
+        visited.add(state)
 
     return maze, False, visited
 
