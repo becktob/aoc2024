@@ -57,8 +57,12 @@ def find_largest_direct_group(raw_input: str) -> tuple[str]:
     return largest_direct
 
 
-def find_any_direct_group_of_size(neighbors: dict[str, set[str]], size: int) -> tuple[str]|None:
+def find_any_direct_group_of_size(neighbors: dict[str, set[str]], size: int) -> tuple[str] | None:
     for group in combinations(neighbors, size):
         if all(n in neighbors[m] for n, m in combinations(group, 2)):
             return tuple(sorted(group))
     return None
+
+
+def solve_part_2(raw_input: str):
+    return ",".join(find_largest_direct_group(raw_input))

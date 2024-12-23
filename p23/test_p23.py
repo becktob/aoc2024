@@ -1,7 +1,7 @@
 from tokenize import group
 from unittest import TestCase
 
-from p23.p23 import find_direct_triplets, solve_part_1, find_groups, find_largest_direct_group
+from p23.p23 import find_direct_triplets, solve_part_1, find_groups, find_largest_direct_group, solve_part_2
 
 demo_input_23 = """kh-tc
 qp-kh
@@ -60,3 +60,6 @@ class Test(TestCase):
     def test_largest_direct_group(self):
         group = find_largest_direct_group(demo_input_23)
         self.assertEqual(('co', 'de', 'ka', 'ta'), group)
+
+    def test_solve_demo_2(self):
+        self.assertEqual('co,de,ka,ta', solve_part_2(demo_input_23))
