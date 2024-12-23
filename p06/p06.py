@@ -43,25 +43,25 @@ def direction_after_turn(current_direction):
 def solve_part_1(raw_input):
     maze = string_to_array(raw_input)
 
-    maze, _, visited_states = run(maze)
+    _, visited_states = run(maze)
 
     visited_positions = set(state[0] for state in visited_states)
     return len(visited_positions)
 
 
-def run(maze):
+def run(maze) -> (bool, set[State]):
     visited = {state := find_start(maze)}
 
     while (state := one_step(maze, state)) is not None:
         if state in visited:
-            return maze, True, visited
+            return True, visited
         visited.add(state)
 
-    return maze, False, visited
+    return False, visited
 
 
 def is_loop(maze):
-    maze, is_loop, visited = run(maze)
+    is_loop, visited = run(maze)
     return is_loop
 
 
@@ -70,7 +70,7 @@ def solve_part_2(raw_input):
 
     # only need to try blocking places visited by basic maze
     basic_maze = maze.copy()
-    basic_run, _, visited_in_basic = run(basic_maze)
+    _, visited_in_basic = run(basic_maze)
     visited_positions = set(state[0] for state in visited_in_basic)
 
     looping_blocks = []
