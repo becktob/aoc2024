@@ -32,3 +32,7 @@ class TestDevice(TestCase):
 
     def test_solve_demo_1_small(self):
         self.assertEqual(4, solve_part_1(demo_24_small))
+
+    def test_solve_part_1(self):
+        with open('p24/input') as f:
+            self.assertEqual(69201640933606, solve_part_1(f.read()))
