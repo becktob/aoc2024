@@ -58,7 +58,7 @@ def solve_part_1(raw_input: str):
     return device.get_z()
 
 
-def is_and(device: Device) -> bool:
+def is_operator(device: Device, op) -> bool:
     input_bit_count = sum(1 for x in device.inits.keys() if x[0] == 'x')
 
     for bit in range(input_bit_count):
@@ -66,7 +66,7 @@ def is_and(device: Device) -> bool:
             device.set_x(op1)
             device.set_y(op2)
 
-            if device.get_z() != operator.and_(op1, op2):
+            if device.get_z() != op(op1, op2):
                 return False
 
     return True
@@ -82,7 +82,7 @@ def swapped_device(raw_input: str, gates_to_swap: Iterable[tuple[str, str]]):
     return device
 
 
-def solve_part_2(raw_input: str) -> str:
+def solve_part_2(raw_input: str, op) -> str:
     device = Device(raw_input)
     num_gates = len(device.gates)
 
@@ -90,5 +90,5 @@ def solve_part_2(raw_input: str) -> str:
         for gates_to_swap in permutations(device.gates, num_swaps * 2):
             pairs = list(batched(gates_to_swap, 2))
 
-            if is_and(swapped_device(raw_input, pairs)):
+            if is_operator(swapped_device(raw_input, pairs), op):
                 return ','.join(sorted(gates_to_swap))

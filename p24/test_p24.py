@@ -1,6 +1,7 @@
+import operator
 from unittest import TestCase
 
-from p24.p24 import Device, solve_part_1, swapped_device, is_and, solve_part_2
+from p24.p24 import Device, solve_part_1, swapped_device, solve_part_2, is_operator
 
 demo_24_small = """x00: 1
 x01: 1
@@ -60,11 +61,11 @@ class TestDevice(TestCase):
 
     def test_is_and(self):
         device = swapped_device(demo_24_add, ())
-        self.assertFalse(is_and(device))
+        self.assertFalse(is_operator(device, operator.and_))
 
     def test_is_and_repaired(self):
         repaired_device = swapped_device(demo_24_add, (('z00', 'z05'), ('z02', 'z01')))
-        self.assertTrue(is_and(repaired_device))
+        self.assertTrue(is_operator(repaired_device, operator.and_))
 
     def test_solve_demo_2(self):
-        self.assertEqual('z00,z01,z02,z05', solve_part_2(demo_24_add))
+        self.assertEqual('z00,z01,z02,z05', solve_part_2(demo_24_add, operator.and_))
