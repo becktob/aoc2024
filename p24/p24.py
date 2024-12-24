@@ -33,3 +33,11 @@ class Device:
         gate = self.gates[wire]
         input_values = [self.get_value(i) for i in gate.inputs]
         return gate.op(*input_values)
+
+
+def solve_part_1(raw_input: str):
+    device = Device(raw_input)
+
+    z_wires = [g for g in device.gates.keys() if g[0] == 'z']
+
+    return sum(2 ** int(wire[1:]) * device.get_value(wire) for wire in z_wires)

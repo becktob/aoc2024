@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from p24.p24 import Device
+from p24.p24 import Device, solve_part_1
 
 demo_24_small = """x00: 1
 x01: 1
@@ -29,3 +29,6 @@ class TestDevice(TestCase):
         self.assertEqual(False, device.get_value('z00'))
         self.assertEqual(False, device.get_value('z01')),
         self.assertEqual(True, device.get_value('z02'))
+
+    def test_solve_demo_1_small(self):
+        self.assertEqual(4, solve_part_1(demo_24_small))
