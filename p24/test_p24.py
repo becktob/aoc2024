@@ -19,3 +19,6 @@ class TestDevice(TestCase):
     def test_parse(self):
         device = Device(demo_24_small)
         self.assertEqual(True, device.inits['y02'])
+
+        gate = device.gates['z00']
+        self.assertEqual(('x00', 'y00'), gate.inputs)
