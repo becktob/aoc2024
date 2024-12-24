@@ -1,4 +1,5 @@
 import operator
+from itertools import batched, permutations
 from typing import Iterable
 
 
@@ -79,3 +80,15 @@ def swapped_device(raw_input: str, gates_to_swap: Iterable[tuple[str, str]]):
         device.gates.update(swap_gates)
 
     return device
+
+
+def solve_part_2(raw_input: str) -> str:
+    device = Device(raw_input)
+    num_gates = len(device.gates)
+
+    for num_swaps in range(num_gates // 2):
+        for gates_to_swap in permutations(device.gates, num_swaps * 2):
+            pairs = list(batched(gates_to_swap, 2))
+
+            if is_and(swapped_device(raw_input, pairs)):
+                return ','.join(sorted(gates_to_swap))
