@@ -68,4 +68,8 @@ class TestDevice(TestCase):
         self.assertTrue(is_operator(repaired_device, operator.and_))
 
     def test_solve_demo_2(self):
-        self.assertEqual('z00,z01,z02,z05', solve_part_2(demo_24_add, operator.and_))
+        self.assertEqual('z00,z01,z02,z05', solve_part_2(demo_24_add, operator.and_, 2))
+
+    def test_solve_part_2(self):
+        with open('p24/input') as f:
+            self.assertEqual(1, solve_part_2(f.read()))

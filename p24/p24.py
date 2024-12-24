@@ -1,5 +1,6 @@
 import operator
 from itertools import batched, permutations
+from math import perm
 from typing import Iterable
 
 
@@ -66,7 +67,11 @@ def is_operator(device: Device, op) -> bool:
             device.set_x(op1)
             device.set_y(op2)
 
-            if device.get_z() != op(op1, op2):
+            try:
+                if device.get_z() != op(op1, op2):
+                    return False
+            except RecursionError:
+                # print("recursion, aborting...")
                 return False
 
     return True
@@ -82,13 +87,16 @@ def swapped_device(raw_input: str, gates_to_swap: Iterable[tuple[str, str]]):
     return device
 
 
-def solve_part_2(raw_input: str, op) -> str:
+def solve_part_2(raw_input: str, op=operator.add, num_swaps=4) -> str:
     device = Device(raw_input)
     num_gates = len(device.gates)
+    total = perm(num_gates, num_swaps * 2)
 
-    for num_swaps in range(num_gates // 2):
-        for gates_to_swap in permutations(device.gates, num_swaps * 2):
-            pairs = list(batched(gates_to_swap, 2))
+    for n, gates_to_swap in enumerate(permutations(device.gates, num_swaps * 2)):
+        if (n % 1000) == 0:
+            print(f"{n}/{total}")
 
-            if is_operator(swapped_device(raw_input, pairs), op):
-                return ','.join(sorted(gates_to_swap))
+        pairs = list(batched(gates_to_swap, 2))
+
+        if is_operator(swapped_device(raw_input, pairs), op):
+            return ','.join(sorted(gates_to_swap))
