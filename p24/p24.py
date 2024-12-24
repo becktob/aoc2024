@@ -19,9 +19,17 @@ class Device:
         self.inits = dict()
         for wire_line in raw_wires.splitlines():
             s = wire_line.split(': ')
-            self.inits.update({s[0]: bool(s[1])})
+            self.inits.update({s[0]: (True if s[1] == '1' else False)})
 
         self.gates = dict()
         for line in raw_gates.splitlines():
             gate = Gate(line)
             self.gates.update({gate.result_wire: gate})
+
+    def get_value(self, wire):
+        if wire in self.inits:
+            return self.inits[wire]
+
+        gate = self.gates[wire]
+        input_values = [self.get_value(i) for i in gate.inputs]
+        return gate.op(*input_values)

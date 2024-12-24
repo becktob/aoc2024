@@ -18,7 +18,14 @@ x02 OR y02 -> z02
 class TestDevice(TestCase):
     def test_parse(self):
         device = Device(demo_24_small)
-        self.assertEqual(True, device.inits['y02'])
+        self.assertEqual(False, device.inits['y02'])
 
         gate = device.gates['z00']
         self.assertEqual(('x00', 'y00'), gate.inputs)
+
+    def test_get_value(self):
+        device = Device(demo_24_small)
+
+        self.assertEqual(False, device.get_value('z00'))
+        self.assertEqual(False, device.get_value('z01')),
+        self.assertEqual(True, device.get_value('z02'))
