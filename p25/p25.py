@@ -20,3 +20,9 @@ def parse_locks_keys(raw_input: str) -> (list[Key], list[Lock]):
 
 def fit(key: Key, lock: Lock) -> bool:
     return all(k + l <= 5 for k, l in zip(key, lock))
+
+
+def solve_part_1(raw_input: str):
+    keys, locks = parse_locks_keys(raw_input)
+
+    return sum(1 for k in keys for l in locks if fit(k, l))
