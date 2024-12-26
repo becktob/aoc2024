@@ -10,9 +10,13 @@ def parse_locks_keys(raw_input: str) -> (list[Key], list[Lock]):
 
     def count_hash_columwise(lines: str):
         columns = zip(*lines.splitlines())
-        return tuple(sum(1 for c in col[1:-1] if c=='#') for col in columns)
+        return tuple(sum(1 for c in col[1:-1] if c == '#') for col in columns)
 
     locks = [count_hash_columwise(raw) for raw in raw_locks]
     keys = [count_hash_columwise(raw) for raw in raw_keys]
 
     return locks, keys
+
+
+def fit(key: Key, lock: Lock) -> bool:
+    return all(k + l <= 5 for k, l in zip(key, lock))
