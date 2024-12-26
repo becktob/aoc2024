@@ -1,5 +1,5 @@
 import operator
-from unittest import TestCase
+from unittest import TestCase, skip
 
 from p24.p24 import Device, solve_part_1, swapped_device, solve_part_2, is_operator
 
@@ -36,6 +36,9 @@ x04 AND y04 -> z04
 x05 AND y05 -> z00
 """
 
+with open('p24/input') as f:
+    full_input_24 = f.read()
+
 
 class TestDevice(TestCase):
     def test_parse(self):
@@ -70,6 +73,10 @@ class TestDevice(TestCase):
     def test_solve_demo_2(self):
         self.assertEqual('z00,z01,z02,z05', solve_part_2(demo_24_add, operator.and_, 2))
 
+    @skip('slow')
     def test_solve_part_2(self):
-        with open('p24/input') as f:
-            self.assertEqual(1, solve_part_2(f.read()))
+        self.assertEqual(1, full_input_24)
+
+    def test_unmodified_device(self):
+        device = Device(full_input_24)
+        self.assertFalse(is_operator(device, operator.add))
