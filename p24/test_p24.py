@@ -74,9 +74,22 @@ class TestDevice(TestCase):
         self.assertEqual('z00,z01,z02,z05', solve_part_2(demo_24_add, operator.and_, 2))
 
     @skip('slow')
-    def test_solve_part_2(self):
+    def test_solve_part_2_brute(self):
         self.assertEqual(1, full_input_24)
 
     def test_unmodified_device(self):
         device = Device(full_input_24)
         self.assertFalse(is_operator(device, operator.add))
+
+    def test_solve_part_2(self):
+        swaps = [('kfp', 'hbs'),  # <kfp = 'x09' AND 'y09'> => <hbs = 'y09' XOR 'x09'>
+                 ('z18', 'dhq'),  # <z18 = 'x18' AND 'y18'> => <dhq = <fwt = 'y18' XOR 'x18'> XOR <pvk ...
+                 ('z22', 'pdg'),  # <z22 = <bqp = 'x22' AND 'y22'> ... => <pdg = <dbp = 'x22' XOR 'y22'> ...
+                 ('z27', 'jcp'),  # <z27 = <ckj> AND <bch> => "<jcp = <ckj> XOR <bch>'"
+                 ]
+
+        device = swapped_device(full_input_24, swaps)
+        self.assertTrue(is_operator(device, operator.add))
+
+        sorted_involved = sorted(g for swap in swaps for g in swap)
+        self.assertEqual('dhq,hbs,jcp,kfp,pdg,z18,z22,z27', ','.join(sorted_involved))

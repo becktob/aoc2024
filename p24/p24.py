@@ -20,7 +20,7 @@ class Gate:
     def __repr__(self):
         in0 = repr(self.input_gates[0])
         in1 = repr(self.input_gates[1])
-        (in0, in1) = sorted( (in0, in1), key=len)
+        (in0, in1) = sorted((in0, in1), key=len)
         return f"<{self.result_wire} = {in0} {self.op_str} {in1}>"
 
 
@@ -40,7 +40,6 @@ class Device:
 
         for gate in self.gates.values():
             gate.input_gates = tuple(self.gates[wire] if wire in self.gates else wire for wire in gate.inputs)
-
 
     def get_value(self, wire):
         if wire in self.inits:
@@ -76,7 +75,6 @@ def is_operator(device: Device, op) -> bool:
     input_bit_count = sum(1 for x in device.inits.keys() if x[0] == 'x')
 
     for bit in range(input_bit_count):
-        print(f"trying {device.gates[f'z{bit+1:02d}']}")
         for op1, op2 in (2 ** bit, 2 ** bit), (0, 2 ** bit), (2 ** bit, 0):
             device.set_x(op1)
             device.set_y(op2)
@@ -87,7 +85,6 @@ def is_operator(device: Device, op) -> bool:
             except RecursionError:
                 # print("recursion, aborting...")
                 return False
-        print(f"device works for {bit=}")
 
     return True
 
